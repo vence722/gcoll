@@ -4,7 +4,7 @@
 
 package list
 
-import "gcoll/collection"
+import "github.com/vence722/gcoll/collection"
 
 const (
 	INIT_LEN = 0

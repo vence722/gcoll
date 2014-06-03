@@ -6,8 +6,8 @@ package set
 
 import (
 	"fmt"
-	"gcoll/collection"
-	"gcoll/maps"
+	"github.com/vence722/gcoll/collection"
+	"github.com/vence722/gcoll/maps"
 )
 
 const (

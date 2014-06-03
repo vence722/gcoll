@@ -4,9 +4,9 @@
 package gcoll
 
 import (
-	"gcoll/list"
-	"gcoll/maps"
-	"gcoll/set"
+	"github.com/vence722/gcoll/list"
+	"github.com/vence722/gcoll/maps"
+	"github.com/vence722/gcoll/set"
 )
 
 func NewArrayList() list.List {
