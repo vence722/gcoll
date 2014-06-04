@@ -231,6 +231,10 @@ func (this *LinkedList) RemoveAt(index int) interface{} {
 		// remove the first element
 		ele = pe.elem
 		this.head = this.head.next
+		// if remove the only one element, tail must be change to nil
+		if this.tail == pe {
+			this.tail = nil
+		}
 	}
 	this.size--
 	return ele
