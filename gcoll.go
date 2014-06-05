@@ -7,6 +7,7 @@ import (
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/maps"
 	"github.com/vence722/gcoll/set"
+	"github.com/vence722/gcoll/tree"
 )
 
 func NewArrayList() list.List {
@@ -27,6 +28,10 @@ func NewStack() list.Stack {
 
 func NewHashMap() maps.Map {
 	return maps.NewHashMap()
+}
+
+func NewBSTreeMap() maps.StringMap {
+	return tree.NewBinarySortTree()
 }
 
 func NewHashSet() set.Set {
