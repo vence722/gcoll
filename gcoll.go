@@ -4,6 +4,7 @@
 package gcoll
 
 import (
+	"github.com/vence722/gcoll/heap"
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/maps"
 	"github.com/vence722/gcoll/set"
@@ -36,4 +37,8 @@ func NewBSTreeMap() maps.StringMap {
 
 func NewHashSet() set.Set {
 	return set.NewHashSet()
+}
+
+func NewArrayHeap() heap.Heap {
+	return heap.NewArrayHeap()
 }
