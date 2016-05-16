@@ -1,4 +1,4 @@
-// gcoll v1.0
+// gcoll
 // @description gcoll is a go collection library which you can use like in Java
 // @authors     Vence Lin(vence722@gmail.com)
 
@@ -6,6 +6,7 @@ package list
 
 import (
 	"fmt"
+
 	"github.com/vence722/gcoll/collection"
 )
 
@@ -347,6 +348,15 @@ func (this *LinkedList) Front() interface{} {
 		return nil
 	}
 	return this.head.elem
+}
+
+// Return the tail of the Queue
+// If there's no element, return a nil value
+func (this *LinkedList) Tail() interface{} {
+	if this.tail == nil {
+		return nil
+	}
+	return this.tail.elem
 }
 
 // Push an element into the Stack

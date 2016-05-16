@@ -1,4 +1,4 @@
-// gcoll v1.0
+// gcoll
 // @description gcoll is a go collection library which you can use like in Java
 // @authors     Vence Lin(vence722@gmail.com)
 package gcoll
@@ -6,6 +6,7 @@ package gcoll
 import (
 	"github.com/vence722/gcoll/heap"
 	"github.com/vence722/gcoll/list"
+	"github.com/vence722/gcoll/lru"
 	"github.com/vence722/gcoll/maps"
 	"github.com/vence722/gcoll/set"
 	"github.com/vence722/gcoll/tree"
@@ -41,4 +42,12 @@ func NewHashSet() set.Set {
 
 func NewArrayHeap() heap.Heap {
 	return heap.NewArrayHeap()
+}
+
+func NewFifoLRUCache(capacity int) lru.LRUCache {
+	return lru.NewFifoLRUCache(capacity)
+}
+
+func NewHitsMapLRUCache(capacity int) lru.LRUCache {
+	return lru.NewHitsMapLRUCache(capacity)
 }

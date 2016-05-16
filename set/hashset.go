@@ -1,4 +1,4 @@
-// gcoll v1.0
+// gcoll
 // @description gcoll is a go collection library which you can use like in Java
 // @authors     Vence Lin(vence722@gmail.com)
 
@@ -6,6 +6,7 @@ package set
 
 import (
 	"fmt"
+
 	"github.com/vence722/gcoll/collection"
 	"github.com/vence722/gcoll/maps"
 )

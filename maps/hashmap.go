@@ -1,4 +1,4 @@
-// gcoll v1.0
+// gcoll
 // @description gcoll is a go collection library which you can use like in Java
 // @authors     Vence Lin(vence722@gmail.com)
 
@@ -101,7 +101,7 @@ func (this *HashMap) Values() []interface{} {
 	return values
 }
 
-// Return a list containing all the entries in the map
+// Return a list containing the copy of all the entries in the map
 func (this *HashMap) Entries() []MapEntry {
 	entries := make([]MapEntry, INIT_LEN, INIT_CAP)
 	for k, v := range this.hmap {

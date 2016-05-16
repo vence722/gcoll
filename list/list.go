@@ -1,4 +1,4 @@
-// gcoll v1.0
+// gcoll
 // @description gcoll is a go collection library which you can use like in Java
 // @authors     Vence Lin(vence722@gmail.com)
 
@@ -25,16 +25,17 @@ type List interface {
 
 // The Queue interface
 type Queue interface {
+	List
 	EnQueue(ele interface{}) bool
 	DeQueue() interface{}
 	Front() interface{}
-	Size() int
+	Tail() interface{}
 }
 
 // The Stack interface
 type Stack interface {
+	List
 	Push(ele interface{}) bool
 	Pop() interface{}
 	Top() interface{}
-	Size() int
 }
