@@ -51,3 +51,8 @@ func NewFifoLRUCache(capacity int) lru.LRUCache {
 func NewHitsMapLRUCache(capacity int) lru.LRUCache {
 	return lru.NewHitsMapLRUCache(capacity)
 }
+
+func NewPriorityQueue() heap.PriorityQueue {
+	// Use ArrayHeap as Priority Queue
+	return heap.NewArrayHeap()
+}

@@ -50,14 +50,36 @@ func (this *ArrayHeap) Put(elem Comparable) {
 	cheap.Push(this.internal, elem)
 }
 
-func (this *ArrayHeap) Top() interface{} {
+func (this *ArrayHeap) Top() Comparable {
+	if this.Empty() {
+		return nil
+	}
 	return (*this.internal.(*arrayHeap))[0]
 }
 
-func (this *ArrayHeap) Take() interface{} {
+func (this *ArrayHeap) Take() Comparable {
 	return cheap.Pop(this.internal).(Comparable)
+}
+
+func (this *ArrayHeap) Empty() bool {
+	h := *this.internal.(*arrayHeap)
+	return h.Len() <= 0
 }
 
 func (this *ArrayHeap) Size() int {
 	return this.internal.Len()
+}
+
+// Consider ArrayHeap as Primary Queue
+func (this *ArrayHeap) EnQueue(ele Comparable) bool {
+	this.Put(ele)
+	return true
+}
+
+func (this *ArrayHeap) DeQueue() Comparable {
+	return this.Take()
+}
+
+func (this *ArrayHeap) Front() Comparable {
+	return this.Top()
 }

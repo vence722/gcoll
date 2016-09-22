@@ -19,9 +19,19 @@ type Heap interface {
 	// Put
 	Put(elem Comparable)
 	// See the top element without taking it
-	Top() interface{}
+	Top() Comparable
 	// Take the top element
-	Take() interface{}
+	Take() Comparable
 	// The current number of elements
+	Size() int
+	// Return if the heap has no element
+	Empty() bool
+}
+
+// The PriorityQueue interface
+type PriorityQueue interface {
+	EnQueue(ele Comparable) bool
+	DeQueue() Comparable
+	Front() Comparable
 	Size() int
 }
