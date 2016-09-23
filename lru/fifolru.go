@@ -11,16 +11,16 @@ import (
 
 // LRU Cache implementation of Fifo Queue
 type FifoLRUCache struct {
-	FifoQueue list.Queue
-	Cap       int
-	Mutex     sync.Mutex
+	fifoQueue list.Queue
+	capacity  int
+	mutex     sync.Mutex
 }
 
 // Constructor
 func NewFifoLRUCache(capacity int) *FifoLRUCache {
 	return &FifoLRUCache{
-		FifoQueue: list.NewLinkedList(),
-		Cap:       capacity,
+		fifoQueue: list.NewLinkedList(),
+		capacity:  capacity,
 	}
 }
 
@@ -31,8 +31,8 @@ func NewFifoLRUCache(capacity int) *FifoLRUCache {
 // Otherwise remove the tail of the FIFO queue
 // before inserting the new element.
 func (this *FifoLRUCache) Put(key interface{}, value interface{}) {
-	this.Mutex.Lock()
-	defer this.Mutex.Unlock()
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
 
 	if found, e := this.findByKey(key); found {
 		// update the value
@@ -44,15 +44,15 @@ func (this *FifoLRUCache) Put(key interface{}, value interface{}) {
 		ne := &entry{}
 		ne.key = key
 		ne.value = value
-		this.FifoQueue.EnQueue(ne)
+		this.fifoQueue.EnQueue(ne)
 	}
 }
 
 // Find the element from the LRU Cache by the key.
 // Returns nil if no such key is found.
 func (this *FifoLRUCache) Get(key interface{}) interface{} {
-	this.Mutex.Lock()
-	defer this.Mutex.Unlock()
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
 
 	if found, entry := this.findByKey(key); found {
 		return entry.value
@@ -63,23 +63,28 @@ func (this *FifoLRUCache) Get(key interface{}) interface{} {
 
 // Returns the size of the LRU Cache
 func (this *FifoLRUCache) Size() int {
-	this.Mutex.Lock()
-	defer this.Mutex.Unlock()
-	return this.FifoQueue.Size()
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	return this.fifoQueue.Size()
+}
+
+// Returns the capacity of the LRU Cache
+func (this *FifoLRUCache) Cap() int {
+	return this.capacity
 }
 
 // Clear the LRU Cache
 func (this *FifoLRUCache) Clear() {
-	this.Mutex.Lock()
-	defer this.Mutex.Unlock()
-	this.FifoQueue.Clear()
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	this.fifoQueue.Clear()
 }
 
 // For FifoLRUCache, remove the last element
 func (this *FifoLRUCache) eliminate() {
 	// check the size of LRU Cache
-	if this.FifoQueue.Size() == this.Cap {
-		this.FifoQueue.DeQueue()
+	if this.fifoQueue.Size() == this.capacity {
+		this.fifoQueue.DeQueue()
 	}
 }
 
@@ -87,7 +92,7 @@ func (this *FifoLRUCache) eliminate() {
 func (this *FifoLRUCache) findByKey(key interface{}) (bool, *entry) {
 	found := false
 	var elem *entry
-	it := this.FifoQueue.Iterate()
+	it := this.fifoQueue.Iterate()
 	for it.HasNext() {
 		e := it.Next().(*entry)
 		if e.key == key {

@@ -16,5 +16,6 @@ type LRUCache interface {
 	Put(key interface{}, value interface{})
 	Get(key interface{}) interface{}
 	Size() int
+	Cap() int
 	Clear()
 }
