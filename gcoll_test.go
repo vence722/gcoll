@@ -6,6 +6,7 @@ package gcoll
 import (
 	"testing"
 
+	"github.com/vence722/gcoll/graph"
 	"github.com/vence722/gcoll/lru"
 	"github.com/vence722/gcoll/tree"
 )
@@ -88,4 +89,40 @@ func TestTrees(t *testing.T) {
 
 	// Get(nil)
 	t.Log(bst.Get("50"))
+}
+
+func TestSimpleGraph(t *testing.T) {
+	g := graph.NewSimpleGraph()
+	v1, _ := g.AddVertex(1, 100)
+	v2, _ := g.AddVertex(2, 200)
+	v3, _ := g.AddVertex(3, 300)
+	g.AddEdge(v1, v2, 30)
+	g.AddEdge(v2, v3, 20)
+	g.AddEdge(v3, v1, 10)
+
+	t.Log("Vertex 1 neighbors size: ", len(g.GetVertex(1).Neighbors()))
+	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key(), g.GetVertex(1).Neighbors()[1].Key())
+	t.Log("Vertex 2 neighbors size: ", len(g.GetVertex(2).Neighbors()))
+	t.Log("Vertex 2 neighbors: ", g.GetVertex(2).Neighbors()[0].Key(), g.GetVertex(2).Neighbors()[1].Key())
+	t.Log("Vertex 3 neighbors size: ", len(g.GetVertex(3).Neighbors()))
+	t.Log("Vertex 3 neighbors: ", g.GetVertex(3).Neighbors()[0].Key(), g.GetVertex(3).Neighbors()[1].Key())
+	t.Log("Edge 1 to 2 value: ", g.GetEdge(v1, v2).Value())
+
+	g.RemoveEdge(v1, v2)
+	t.Log("===After remove edge 1 to 2===")
+	t.Log("Vertex 1 neighbors size: ", len(g.GetVertex(1).Neighbors()))
+	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key())
+	t.Log("Vertex 2 neighbors size: ", len(g.GetVertex(2).Neighbors()))
+	t.Log("Vertex 2 neighbors: ", g.GetVertex(2).Neighbors()[0].Key())
+	t.Log("Vertex 3 neighbors size: ", len(g.GetVertex(3).Neighbors()))
+	t.Log("Vertex 3 neighbors: ", g.GetVertex(3).Neighbors()[0].Key(), g.GetVertex(3).Neighbors()[1].Key())
+	g.AddEdge(v1, v2, 30)
+	t.Log("===Edge 1 to 2 recovered===")
+
+	g.RemoveVertex(3)
+	t.Log("===After remove vertex 3===")
+	t.Log("Vertex 1 neighbors size: ", len(g.GetVertex(1).Neighbors()))
+	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key())
+	t.Log("Vertex 2 neighbors size: ", len(g.GetVertex(2).Neighbors()))
+	t.Log("Vertex 2 neighbors: ", g.GetVertex(2).Neighbors()[0].Key())
 }
