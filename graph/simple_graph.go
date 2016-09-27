@@ -88,9 +88,27 @@ func (this *SimpleGraph) AddEdge(x Vertex, y Vertex, value interface{}) (Edge, e
 	svy := y.(*SimpleVertex)
 	e := &SimpleEdge{from: svx, to: svy, value: value}
 	this.edges = append(this.edges, e)
-	// Add neighbour
-	svx.neighbors = append(svx.neighbors, svy)
-	svy.neighbors = append(svy.neighbors, svx)
+	// Add neighbour if not exists
+	var exists = false
+	for _, n := range svx.neighbors {
+		if n.Key() == svy.Key() {
+			exists = true
+		}
+	}
+	if !exists {
+		svx.neighbors = append(svx.neighbors, svy)
+	}
+
+	exists = false
+	for _, n := range svy.neighbors {
+		if n.Key() == svx.Key() {
+			exists = true
+		}
+	}
+	if !exists {
+		svy.neighbors = append(svy.neighbors, svx)
+	}
+
 	return e, nil
 }
 

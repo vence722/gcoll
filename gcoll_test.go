@@ -97,8 +97,11 @@ func TestSimpleGraph(t *testing.T) {
 	v2, _ := g.AddVertex(2, 200)
 	v3, _ := g.AddVertex(3, 300)
 	g.AddEdge(v1, v2, 30)
+	g.AddEdge(v2, v1, 15)
 	g.AddEdge(v2, v3, 20)
+	g.AddEdge(v3, v2, 10)
 	g.AddEdge(v3, v1, 10)
+	g.AddEdge(v1, v3, 5)
 
 	t.Log("Vertex 1 neighbors size: ", len(g.GetVertex(1).Neighbors()))
 	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key(), g.GetVertex(1).Neighbors()[1].Key())
@@ -109,7 +112,8 @@ func TestSimpleGraph(t *testing.T) {
 	t.Log("Edge 1 to 2 value: ", g.GetEdge(v1, v2).Value())
 
 	g.RemoveEdge(v1, v2)
-	t.Log("===After remove edge 1 to 2===")
+	g.RemoveEdge(v2, v1)
+	t.Log("===After remove edge 1 to 2 & 2 to 1===")
 	t.Log("Vertex 1 neighbors size: ", len(g.GetVertex(1).Neighbors()))
 	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key())
 	t.Log("Vertex 2 neighbors size: ", len(g.GetVertex(2).Neighbors()))
@@ -117,6 +121,7 @@ func TestSimpleGraph(t *testing.T) {
 	t.Log("Vertex 3 neighbors size: ", len(g.GetVertex(3).Neighbors()))
 	t.Log("Vertex 3 neighbors: ", g.GetVertex(3).Neighbors()[0].Key(), g.GetVertex(3).Neighbors()[1].Key())
 	g.AddEdge(v1, v2, 30)
+	g.AddEdge(v2, v1, 15)
 	t.Log("===Edge 1 to 2 recovered===")
 
 	g.RemoveVertex(3)
