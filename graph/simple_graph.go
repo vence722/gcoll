@@ -2,6 +2,14 @@ package graph
 
 import (
 	"errors"
+
+	"github.com/vence722/gcoll/list"
+	"github.com/vence722/gcoll/set"
+)
+
+const (
+	ITERATE_METHOD_DFS string = "DFS"
+	ITERATE_METHOD_BFS string = "BFS"
 )
 
 var (
@@ -125,6 +133,38 @@ func (this *SimpleGraph) RemoveEdge(x Vertex, y Vertex) error {
 	return nil
 }
 
+// Breadth-first Search Iteration
+func (this *SimpleGraph) IterateByBFS(startKey interface{}) GraphIterator {
+	var startVertex *SimpleVertex
+	if startKey != nil {
+		v := this.GetVertex(startKey)
+		if v != nil {
+			startVertex = v.(*SimpleVertex)
+		}
+	}
+	// If start key not specified or start vertex not found, use first vertex in the list
+	if startKey == nil && len(this.vertics) > 0 {
+		startVertex = this.vertics[0]
+	}
+	return newSimpleGraphIterator(ITERATE_METHOD_BFS, startVertex)
+}
+
+// Depth-First Search Iteration
+func (this *SimpleGraph) IterateByDFS(startKey interface{}) GraphIterator {
+	var startVertex *SimpleVertex
+	if startKey != nil {
+		v := this.GetVertex(startKey)
+		if v != nil {
+			startVertex = v.(*SimpleVertex)
+		}
+	}
+	// If start key not specified or start vertex not found, use first vertex in the list
+	if startKey == nil && len(this.vertics) > 0 {
+		startVertex = this.vertics[0]
+	}
+	return newSimpleGraphIterator(ITERATE_METHOD_DFS, startVertex)
+}
+
 func (this *SimpleGraph) delEdge(x Vertex, y Vertex) error {
 	if this.GetEdge(x, y) == nil {
 		return ERR_EDGE_NOT_EXISTS
@@ -197,4 +237,106 @@ func (this *SimpleEdge) From() Vertex {
 
 func (this *SimpleEdge) To() Vertex {
 	return this.to
+}
+
+// Implementation of the GraphIterator for SimpleGraph
+type SimpleGraphIterator struct {
+	currVertex     *SimpleVertex
+	visitedVertics set.Set
+	method         string
+	bfsQueue       list.Queue
+	dfsStack       list.Stack
+}
+
+func (this *SimpleGraphIterator) HasNext() bool {
+	if this.currVertex != nil {
+		return true
+	}
+	return false
+}
+
+func (this *SimpleGraphIterator) Next() Vertex {
+	next := this.currVertex
+	if next == nil {
+		return next
+	}
+	// add the next vertex to visited set
+	this.visitedVertics.Add(next)
+
+	if this.method == ITERATE_METHOD_BFS {
+		if this.bfsQueue.Size() > 0 {
+			this.currVertex = this.findNextNonTraveledVertex(ITERATE_METHOD_BFS)
+			if this.currVertex != nil {
+				// put the neighbors of the next vertex to the queue
+				for _, n := range this.currVertex.neighbors {
+					this.bfsQueue.EnQueue(n)
+				}
+			}
+		} else {
+			this.currVertex = nil
+		}
+	}
+
+	if this.method == ITERATE_METHOD_DFS {
+		if this.dfsStack.Size() > 0 {
+			this.currVertex = this.findNextNonTraveledVertex(ITERATE_METHOD_DFS)
+			if this.currVertex != nil {
+				// put the neighbors of the next vertex to the stack
+				for _, n := range this.currVertex.neighbors {
+					this.dfsStack.Push(n)
+				}
+			}
+		}
+	}
+
+	return next
+}
+
+func (this *SimpleGraphIterator) findNextNonTraveledVertex(method string) *SimpleVertex {
+	var next *SimpleVertex
+	for {
+		if method == ITERATE_METHOD_BFS {
+			if this.bfsQueue.Front() != nil {
+				next = this.bfsQueue.DeQueue().(*SimpleVertex)
+				if !this.visitedVertics.Contains(next) {
+					break
+				}
+			} else {
+				next = nil
+				break
+			}
+		} else if method == ITERATE_METHOD_DFS {
+			if this.dfsStack.Top() != nil {
+				next = this.dfsStack.Pop().(*SimpleVertex)
+				if !this.visitedVertics.Contains(next) {
+					break
+				}
+			} else {
+				next = nil
+				break
+			}
+		}
+	}
+	return next
+}
+
+func newSimpleGraphIterator(method string, startFrom *SimpleVertex) *SimpleGraphIterator {
+	iter := &SimpleGraphIterator{currVertex: startFrom, visitedVertics: set.NewHashSet(), method: method}
+	// For BFS, initialize the queue
+	if method == ITERATE_METHOD_BFS {
+		iter.bfsQueue = list.NewLinkedList()
+		if startFrom != nil {
+			for _, n := range startFrom.neighbors {
+				iter.bfsQueue.EnQueue(n)
+			}
+		}
+	} else if method == ITERATE_METHOD_DFS {
+		iter.dfsStack = list.NewLinkedList()
+		if startFrom != nil {
+			for _, n := range startFrom.neighbors {
+				iter.dfsStack.Push(n)
+			}
+		}
+	}
+	return iter
 }

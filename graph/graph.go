@@ -9,6 +9,8 @@ type Graph interface {
 	GetEdge(x Vertex, y Vertex) Edge
 	AddEdge(x Vertex, y Vertex, value interface{}) (Edge, error)
 	RemoveEdge(x Vertex, y Vertex) error
+	IterateByBFS(startKey interface{}) GraphIterator
+	IterateByDFS(startKey interface{}) GraphIterator
 }
 
 type Vertex interface {
@@ -21,4 +23,9 @@ type Edge interface {
 	Value() interface{}
 	From() Vertex
 	To() Vertex
+}
+
+type GraphIterator interface {
+	HasNext() bool
+	Next() Vertex
 }

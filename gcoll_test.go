@@ -11,10 +11,6 @@ import (
 	"github.com/vence722/gcoll/tree"
 )
 
-func TestLists(t *testing.T) {
-
-}
-
 func TestLRUCache(t *testing.T) {
 	// === Test Fifo LRU Cache ===
 	fifoLRU := lru.NewFifoLRUCache(5)
@@ -130,4 +126,35 @@ func TestSimpleGraph(t *testing.T) {
 	t.Log("Vertex 1 neighbors: ", g.GetVertex(1).Neighbors()[0].Key())
 	t.Log("Vertex 2 neighbors size: ", len(g.GetVertex(2).Neighbors()))
 	t.Log("Vertex 2 neighbors: ", g.GetVertex(2).Neighbors()[0].Key())
+}
+
+func TestIterateSimpleGraph(t *testing.T) {
+	g := graph.NewSimpleGraph()
+	v1, _ := g.AddVertex(1, 100)
+	v2, _ := g.AddVertex(2, 200)
+	v3, _ := g.AddVertex(3, 300)
+	v4, _ := g.AddVertex(4, 400)
+	g.AddEdge(v1, v2, 30)
+	g.AddEdge(v2, v1, 15)
+	//	g.AddEdge(v2, v3, 20)
+	//	g.AddEdge(v3, v2, 10)
+	g.AddEdge(v3, v1, 10)
+	g.AddEdge(v1, v3, 5)
+	g.AddEdge(v1, v4, 40)
+	g.AddEdge(v4, v1, 20)
+
+	// Iterate the graph by BFS order
+	iter := g.IterateByBFS(2)
+	var v graph.Vertex
+	for iter.HasNext() {
+		v = iter.Next()
+		t.Log(v.Key(), v.Value())
+	}
+
+	// Iterate the graph by DFS order
+	iter1 := g.IterateByDFS(2)
+	for iter1.HasNext() {
+		v = iter1.Next()
+		t.Log(v.Key(), v.Value())
+	}
 }
