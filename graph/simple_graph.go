@@ -146,7 +146,7 @@ func (this *SimpleGraph) IterateByBFS(startKey interface{}) GraphIterator {
 	if startKey == nil && len(this.vertics) > 0 {
 		startVertex = this.vertics[0]
 	}
-	return newSimpleGraphIterator(ITERATE_METHOD_BFS, startVertex)
+	return newSimpleGraphIterator(this, ITERATE_METHOD_BFS, startVertex)
 }
 
 // Depth-First Search Iteration
@@ -162,7 +162,7 @@ func (this *SimpleGraph) IterateByDFS(startKey interface{}) GraphIterator {
 	if startKey == nil && len(this.vertics) > 0 {
 		startVertex = this.vertics[0]
 	}
-	return newSimpleGraphIterator(ITERATE_METHOD_DFS, startVertex)
+	return newSimpleGraphIterator(this, ITERATE_METHOD_DFS, startVertex)
 }
 
 func (this *SimpleGraph) delEdge(x Vertex, y Vertex) error {
@@ -241,6 +241,7 @@ func (this *SimpleEdge) To() Vertex {
 
 // Implementation of the GraphIterator for SimpleGraph
 type SimpleGraphIterator struct {
+	graph          *SimpleGraph
 	currVertex     *SimpleVertex
 	visitedVertics set.Set
 	method         string
@@ -265,12 +266,10 @@ func (this *SimpleGraphIterator) Next() Vertex {
 
 	if this.method == ITERATE_METHOD_BFS {
 		if this.bfsQueue.Size() > 0 {
-			this.currVertex = this.findNextNonTraveledVertex(ITERATE_METHOD_BFS)
+			this.currVertex = this.findNextNonTraveledVertex()
 			if this.currVertex != nil {
-				// put the neighbors of the next vertex to the queue
-				for _, n := range this.currVertex.neighbors {
-					this.bfsQueue.EnQueue(n)
-				}
+				// put the neighbors which the vertex has an edge leading to in the queue
+				this.handleNeighborVertics(this.currVertex)
 			}
 		} else {
 			this.currVertex = nil
@@ -279,23 +278,23 @@ func (this *SimpleGraphIterator) Next() Vertex {
 
 	if this.method == ITERATE_METHOD_DFS {
 		if this.dfsStack.Size() > 0 {
-			this.currVertex = this.findNextNonTraveledVertex(ITERATE_METHOD_DFS)
+			this.currVertex = this.findNextNonTraveledVertex()
 			if this.currVertex != nil {
-				// put the neighbors of the next vertex to the stack
-				for _, n := range this.currVertex.neighbors {
-					this.dfsStack.Push(n)
-				}
+				// put the neighbors which the vertex has an edge leading to in the stack
+				this.handleNeighborVertics(this.currVertex)
 			}
+		} else {
+			this.currVertex = nil
 		}
 	}
 
 	return next
 }
 
-func (this *SimpleGraphIterator) findNextNonTraveledVertex(method string) *SimpleVertex {
+func (this *SimpleGraphIterator) findNextNonTraveledVertex() *SimpleVertex {
 	var next *SimpleVertex
 	for {
-		if method == ITERATE_METHOD_BFS {
+		if this.method == ITERATE_METHOD_BFS {
 			if this.bfsQueue.Front() != nil {
 				next = this.bfsQueue.DeQueue().(*SimpleVertex)
 				if !this.visitedVertics.Contains(next) {
@@ -305,7 +304,7 @@ func (this *SimpleGraphIterator) findNextNonTraveledVertex(method string) *Simpl
 				next = nil
 				break
 			}
-		} else if method == ITERATE_METHOD_DFS {
+		} else if this.method == ITERATE_METHOD_DFS {
 			if this.dfsStack.Top() != nil {
 				next = this.dfsStack.Pop().(*SimpleVertex)
 				if !this.visitedVertics.Contains(next) {
@@ -320,23 +319,32 @@ func (this *SimpleGraphIterator) findNextNonTraveledVertex(method string) *Simpl
 	return next
 }
 
-func newSimpleGraphIterator(method string, startFrom *SimpleVertex) *SimpleGraphIterator {
-	iter := &SimpleGraphIterator{currVertex: startFrom, visitedVertics: set.NewHashSet(), method: method}
+func (this *SimpleGraphIterator) handleNeighborVertics(vertex *SimpleVertex) {
+	if this.method == ITERATE_METHOD_BFS {
+		for _, n := range vertex.neighbors {
+			if this.graph.GetEdge(vertex, n) != nil {
+				this.bfsQueue.EnQueue(n)
+			}
+		}
+	} else if this.method == ITERATE_METHOD_DFS {
+		for _, n := range vertex.neighbors {
+			if this.graph.GetEdge(vertex, n) != nil {
+				this.dfsStack.Push(n)
+			}
+		}
+	}
+}
+
+func newSimpleGraphIterator(graph *SimpleGraph, method string, startFrom *SimpleVertex) *SimpleGraphIterator {
+	iter := &SimpleGraphIterator{graph: graph, currVertex: startFrom, visitedVertics: set.NewHashSet(), method: method}
 	// For BFS, initialize the queue
 	if method == ITERATE_METHOD_BFS {
 		iter.bfsQueue = list.NewLinkedList()
-		if startFrom != nil {
-			for _, n := range startFrom.neighbors {
-				iter.bfsQueue.EnQueue(n)
-			}
-		}
 	} else if method == ITERATE_METHOD_DFS {
 		iter.dfsStack = list.NewLinkedList()
-		if startFrom != nil {
-			for _, n := range startFrom.neighbors {
-				iter.dfsStack.Push(n)
-			}
-		}
+	}
+	if startFrom != nil {
+		iter.handleNeighborVertics(iter.currVertex)
 	}
 	return iter
 }

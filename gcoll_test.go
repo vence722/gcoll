@@ -4,6 +4,7 @@
 package gcoll
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/vence722/gcoll/graph"
@@ -134,27 +135,34 @@ func TestIterateSimpleGraph(t *testing.T) {
 	v2, _ := g.AddVertex(2, 200)
 	v3, _ := g.AddVertex(3, 300)
 	v4, _ := g.AddVertex(4, 400)
-	g.AddEdge(v1, v2, 30)
-	g.AddEdge(v2, v1, 15)
-	//	g.AddEdge(v2, v3, 20)
-	//	g.AddEdge(v3, v2, 10)
-	g.AddEdge(v3, v1, 10)
-	g.AddEdge(v1, v3, 5)
-	g.AddEdge(v1, v4, 40)
-	g.AddEdge(v4, v1, 20)
+	g.AddEdge(v2, v1, 30)
+	g.AddEdge(v2, v3, 5)
+	g.AddEdge(v1, v4, 20)
 
 	// Iterate the graph by BFS order
+	t.Log("===IterateByBFS===")
 	iter := g.IterateByBFS(2)
 	var v graph.Vertex
+	route := ""
 	for iter.HasNext() {
 		v = iter.Next()
-		t.Log(v.Key(), v.Value())
+		if route != "" {
+			route = route + "-->"
+		}
+		route = route + fmt.Sprintf("%d", v.Key())
 	}
+	t.Log("route:", route)
 
 	// Iterate the graph by DFS order
+	t.Log("===IterateByDFS===")
 	iter1 := g.IterateByDFS(2)
+	route = ""
 	for iter1.HasNext() {
 		v = iter1.Next()
-		t.Log(v.Key(), v.Value())
+		if route != "" {
+			route = route + "-->"
+		}
+		route = route + fmt.Sprintf("%d", v.Key())
 	}
+	t.Log("route:", route)
 }
