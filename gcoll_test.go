@@ -166,3 +166,31 @@ func TestIterateSimpleGraph(t *testing.T) {
 	}
 	t.Log("route:", route)
 }
+
+func TestSimpleWeightedGraph(t *testing.T) {
+	wg := graph.NewSimpleWeightedGraph()
+	va, _ := wg.AddVertex("A", "A")
+	vb, _ := wg.AddVertex("B", "B")
+	vc, _ := wg.AddVertex("C", "C")
+	vd, _ := wg.AddVertex("D", "D")
+	ve, _ := wg.AddVertex("E", "E")
+
+	wg.AddEdgeWithWeight(va, vb, nil, 11)
+	wg.AddEdgeWithWeight(vb, va, nil, 11)
+	wg.AddEdgeWithWeight(va, vd, nil, 9)
+	wg.AddEdgeWithWeight(vd, va, nil, 9)
+	wg.AddEdgeWithWeight(va, ve, nil, 7)
+	wg.AddEdgeWithWeight(ve, va, nil, 7)
+	wg.AddEdgeWithWeight(vb, vc, nil, 10)
+	wg.AddEdgeWithWeight(vc, vb, nil, 10)
+	wg.AddEdgeWithWeight(vc, vd, nil, 12)
+	wg.AddEdgeWithWeight(vd, vc, nil, 12)
+	wg.AddEdgeWithWeight(vd, ve, nil, 8)
+	wg.AddEdgeWithWeight(ve, vd, nil, 8)
+
+	t.Log("===Initial Simple Weighted Graph===")
+	t.Log(wg)
+	t.Log("===After Remove Vertex A===")
+	t.Log(wg.RemoveVertex("A"))
+	t.Log(wg)
+}

@@ -4,6 +4,7 @@
 package gcoll
 
 import (
+	"github.com/vence722/gcoll/graph"
 	"github.com/vence722/gcoll/heap"
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/lru"
@@ -55,4 +56,12 @@ func NewHitsMapLRUCache(capacity int) lru.LRUCache {
 func NewPriorityQueue() heap.PriorityQueue {
 	// Use ArrayHeap as Priority Queue
 	return heap.NewArrayHeap()
+}
+
+func NewSimpleGraph() graph.Graph {
+	return graph.NewSimpleGraph()
+}
+
+func NewWeightedSimpleGraph() graph.WeightedGraph {
+	return graph.NewSimpleWeightedGraph()
 }

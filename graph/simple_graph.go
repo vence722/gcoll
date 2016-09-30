@@ -1,7 +1,11 @@
+// gcoll
+// @description gcoll is a go collection library which you can use like in Java
+// @authors     Vence Lin(vence722@gmail.com)
 package graph
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/set"
@@ -17,11 +21,15 @@ var (
 	ERR_VERTEX_KEY_NOT_EXISTS error = errors.New("Vertex key not exists")
 	ERR_EDGE_EXISTS           error = errors.New("Edge exists")
 	ERR_EDGE_NOT_EXISTS       error = errors.New("Edge not exists")
+	ERR_NEIGHBOR_IS_NULL      error = errors.New("Neighbor is null")
+	ERR_NEIGHBOR_NOT_EXISTS   error = errors.New("Neighbor not exists")
 )
 
+// Implementation of Simple Graph
+// It is flexible for other implementation to "extend"
 type SimpleGraph struct {
-	vertics []*SimpleVertex
-	edges   []*SimpleEdge
+	vertics []Vertex
+	edges   []Edge
 }
 
 func (this *SimpleGraph) Vertices() []Vertex {
@@ -53,17 +61,16 @@ func (this *SimpleGraph) AddVertex(key interface{}, value interface{}) (Vertex, 
 	if this.GetVertex(key) != nil {
 		return nil, ERR_VERTEX_KEY_EXISTS
 	}
-	v := &SimpleVertex{key: key, value: value, neighbors: []*SimpleVertex{}}
+	v := &SimpleVertex{key: key, value: value, neighbors: []Vertex{}}
 	this.vertics = append(this.vertics, v)
 	return v, nil
 }
 
 // Remove vertex with specified key, and delete the edges related to it
 func (this *SimpleGraph) RemoveVertex(key interface{}) error {
-	var vertex *SimpleVertex = nil
+	var vertex Vertex = nil
 	for i, v := range this.vertics {
 		if v.Key() == key {
-			vertex = v
 			this.vertics = append(this.vertics[:i], this.vertics[i+1:]...)
 			break
 		}
@@ -71,7 +78,7 @@ func (this *SimpleGraph) RemoveVertex(key interface{}) error {
 	if vertex == nil {
 		return ERR_VERTEX_KEY_NOT_EXISTS
 	}
-	for _, n := range vertex.neighbors {
+	for _, n := range vertex.Neighbors() {
 		// delete edges for both directions
 		this.RemoveEdge(vertex, n)
 		this.RemoveEdge(n, vertex)
@@ -81,7 +88,7 @@ func (this *SimpleGraph) RemoveVertex(key interface{}) error {
 
 func (this *SimpleGraph) GetEdge(x Vertex, y Vertex) Edge {
 	for _, e := range this.edges {
-		if e.from.Key() == x.Key() && e.to.Key() == y.Key() {
+		if e.From().Key() == x.Key() && e.To().Key() == y.Key() {
 			return e
 		}
 	}
@@ -92,31 +99,8 @@ func (this *SimpleGraph) AddEdge(x Vertex, y Vertex, value interface{}) (Edge, e
 	if this.GetEdge(x, y) != nil {
 		return nil, ERR_EDGE_EXISTS
 	}
-	svx := x.(*SimpleVertex)
-	svy := y.(*SimpleVertex)
-	e := &SimpleEdge{from: svx, to: svy, value: value}
-	this.edges = append(this.edges, e)
-	// Add neighbour if not exists
-	var exists = false
-	for _, n := range svx.neighbors {
-		if n.Key() == svy.Key() {
-			exists = true
-		}
-	}
-	if !exists {
-		svx.neighbors = append(svx.neighbors, svy)
-	}
-
-	exists = false
-	for _, n := range svy.neighbors {
-		if n.Key() == svx.Key() {
-			exists = true
-		}
-	}
-	if !exists {
-		svy.neighbors = append(svy.neighbors, svx)
-	}
-
+	e := &SimpleEdge{from: x, to: y, value: value}
+	this.addEdgeInternal(e)
 	return e, nil
 }
 
@@ -144,7 +128,7 @@ func (this *SimpleGraph) IterateByBFS(startKey interface{}) GraphIterator {
 	}
 	// If start key not specified or start vertex not found, use first vertex in the list
 	if startKey == nil && len(this.vertics) > 0 {
-		startVertex = this.vertics[0]
+		startVertex = this.vertics[0].(*SimpleVertex)
 	}
 	return newSimpleGraphIterator(this, ITERATE_METHOD_BFS, startVertex)
 }
@@ -160,9 +144,43 @@ func (this *SimpleGraph) IterateByDFS(startKey interface{}) GraphIterator {
 	}
 	// If start key not specified or start vertex not found, use first vertex in the list
 	if startKey == nil && len(this.vertics) > 0 {
-		startVertex = this.vertics[0]
+		startVertex = this.vertics[0].(*SimpleVertex)
 	}
 	return newSimpleGraphIterator(this, ITERATE_METHOD_DFS, startVertex)
+}
+
+func (this *SimpleGraph) String() string {
+	str := ""
+	for _, edge := range this.edges {
+		str += fmt.Sprintf("%s--->%s\n", edge.From().Key(), edge.To().Key())
+	}
+	return str
+}
+
+func (this *SimpleGraph) addEdgeInternal(edge Edge) {
+	this.edges = append(this.edges, edge)
+	svx := edge.From()
+	svy := edge.To()
+	// Add neighbour if not exists
+	var exists = false
+	for _, n := range svx.Neighbors() {
+		if n.Key() == svy.Key() {
+			exists = true
+		}
+	}
+	if !exists {
+		svx.AddNeighbor(svy)
+	}
+
+	exists = false
+	for _, n := range svy.Neighbors() {
+		if n.Key() == svx.Key() {
+			exists = true
+		}
+	}
+	if !exists {
+		svy.AddNeighbor(svx)
+	}
 }
 
 func (this *SimpleGraph) delEdge(x Vertex, y Vertex) error {
@@ -170,7 +188,7 @@ func (this *SimpleGraph) delEdge(x Vertex, y Vertex) error {
 		return ERR_EDGE_NOT_EXISTS
 	}
 	for i, e := range this.edges {
-		if e.from.Key() == x.Key() && e.to.Key() == y.Key() {
+		if e.From().Key() == x.Key() && e.To().Key() == y.Key() {
 			this.edges = append(this.edges[:i], this.edges[i+1:]...)
 			break
 		}
@@ -179,30 +197,19 @@ func (this *SimpleGraph) delEdge(x Vertex, y Vertex) error {
 }
 
 func (this *SimpleGraph) delNeighbors(x Vertex, y Vertex) {
-	svx := x.(*SimpleVertex)
-	svy := y.(*SimpleVertex)
-	for i, n := range svx.neighbors {
-		if n.Key() == svy.Key() {
-			svx.neighbors = append(svx.neighbors[:i], svx.neighbors[i+1:]...)
-			break
-		}
-	}
-	for i, n := range svy.neighbors {
-		if n.Key() == svx.Key() {
-			svy.neighbors = append(svy.neighbors[:i], svy.neighbors[i+1:]...)
-			break
-		}
-	}
+	x.RemoveNeighbor(y)
+	y.RemoveNeighbor(x)
 }
 
 func NewSimpleGraph() *SimpleGraph {
 	return &SimpleGraph{}
 }
 
+// Implementation of Simple Vertex
 type SimpleVertex struct {
 	key       interface{}
 	value     interface{}
-	neighbors []*SimpleVertex
+	neighbors []Vertex
 }
 
 func (this *SimpleVertex) Key() interface{} {
@@ -221,9 +228,28 @@ func (this *SimpleVertex) Neighbors() []Vertex {
 	return rtns
 }
 
+func (this *SimpleVertex) AddNeighbor(neighbor Vertex) error {
+	if neighbor == nil {
+		return ERR_NEIGHBOR_IS_NULL
+	}
+	this.neighbors = append(this.neighbors, neighbor)
+	return nil
+}
+
+func (this *SimpleVertex) RemoveNeighbor(neighbor Vertex) error {
+	for i, n := range this.neighbors {
+		if n.Key() == neighbor.Key() {
+			this.neighbors = append(this.neighbors[:i], this.neighbors[i+1:]...)
+			return nil
+		}
+	}
+	return ERR_NEIGHBOR_NOT_EXISTS
+}
+
+// Implementation of Simple Edge
 type SimpleEdge struct {
-	from  *SimpleVertex
-	to    *SimpleVertex
+	from  Vertex
+	to    Vertex
 	value interface{}
 }
 
@@ -242,7 +268,7 @@ func (this *SimpleEdge) To() Vertex {
 // Implementation of the GraphIterator for SimpleGraph
 type SimpleGraphIterator struct {
 	graph          *SimpleGraph
-	currVertex     *SimpleVertex
+	currVertex     Vertex
 	visitedVertics set.Set
 	method         string
 	bfsQueue       list.Queue
@@ -319,15 +345,15 @@ func (this *SimpleGraphIterator) findNextNonTraveledVertex() *SimpleVertex {
 	return next
 }
 
-func (this *SimpleGraphIterator) handleNeighborVertics(vertex *SimpleVertex) {
+func (this *SimpleGraphIterator) handleNeighborVertics(vertex Vertex) {
 	if this.method == ITERATE_METHOD_BFS {
-		for _, n := range vertex.neighbors {
+		for _, n := range vertex.Neighbors() {
 			if this.graph.GetEdge(vertex, n) != nil {
 				this.bfsQueue.EnQueue(n)
 			}
 		}
 	} else if this.method == ITERATE_METHOD_DFS {
-		for _, n := range vertex.neighbors {
+		for _, n := range vertex.Neighbors() {
 			if this.graph.GetEdge(vertex, n) != nil {
 				this.dfsStack.Push(n)
 			}

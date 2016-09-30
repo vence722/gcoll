@@ -1,5 +1,9 @@
+// gcoll
+// @description gcoll is a go collection library which you can use like in Java
+// @authors     Vence Lin(vence722@gmail.com)
 package graph
 
+// Basic Graph
 type Graph interface {
 	Vertices() []Vertex
 	Edges() []Edge
@@ -17,6 +21,8 @@ type Vertex interface {
 	Key() interface{}
 	Value() interface{}
 	Neighbors() []Vertex
+	AddNeighbor(neighbor Vertex) error
+	RemoveNeighbor(neighbor Vertex) error
 }
 
 type Edge interface {
@@ -28,4 +34,16 @@ type Edge interface {
 type GraphIterator interface {
 	HasNext() bool
 	Next() Vertex
+}
+
+// Weighted Graph
+type WeightedGraph interface {
+	Graph
+	AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error)
+	CreateMinimalSpanningTree() (WeightedGraph, float64)
+}
+
+type WeightedEdge interface {
+	Edge
+	Weight() float64
 }
