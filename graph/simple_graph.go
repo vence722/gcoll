@@ -71,6 +71,7 @@ func (this *SimpleGraph) RemoveVertex(key interface{}) error {
 	var vertex Vertex = nil
 	for i, v := range this.vertics {
 		if v.Key() == key {
+			vertex = v
 			this.vertics = append(this.vertics[:i], this.vertics[i+1:]...)
 			break
 		}

@@ -191,6 +191,6 @@ func TestSimpleWeightedGraph(t *testing.T) {
 	t.Log("===Initial Simple Weighted Graph===")
 	t.Log(wg)
 	t.Log("===After Remove Vertex A===")
-	t.Log(wg.RemoveVertex("A"))
+	wg.RemoveVertex("A")
 	t.Log(wg)
 }
