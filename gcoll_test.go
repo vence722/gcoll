@@ -190,7 +190,9 @@ func TestSimpleWeightedGraph(t *testing.T) {
 
 	t.Log("===Initial Simple Weighted Graph===")
 	t.Log(wg)
+	t.Log(wg.CreateMinimalSpanningTree(va))
 	t.Log("===After Remove Vertex A===")
 	wg.RemoveVertex("A")
 	t.Log(wg)
+
 }
