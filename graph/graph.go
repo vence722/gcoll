@@ -39,6 +39,8 @@ type GraphIterator interface {
 // Weighted Graph
 type WeightedGraph interface {
 	Graph
+	WeightedEdges() []WeightedEdge
+	GetWeightedEdge(x Vertex, y Vertex) WeightedEdge
 	AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error)
 	CreateMinimalSpanningTree(root Vertex) (WeightedGraph, float64, error)
 }
