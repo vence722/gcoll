@@ -8,9 +8,19 @@ import (
 	"testing"
 
 	"github.com/vence722/gcoll/graph"
+	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/lru"
+	"github.com/vence722/gcoll/matrix"
 	"github.com/vence722/gcoll/tree"
 )
+
+func TestList(t *testing.T) {
+	lnkList := list.NewLinkedList()
+	lnkList.Add(nil)
+	lnkList.Add(nil)
+	lnkList.Set(1, 1)
+	t.Log(lnkList)
+}
 
 func TestLRUCache(t *testing.T) {
 	// === Test Fifo LRU Cache ===
@@ -196,4 +206,17 @@ func TestSimpleWeightedGraph(t *testing.T) {
 	wg.RemoveVertex("A")
 	t.Log(wg)
 
+}
+
+func TestMatrix(t *testing.T) {
+	mtrx := matrix.NewLinkedMatrix(5, 5)
+	t.Log(mtrx.Size())
+	mtrx.Set(0, 0, 1)
+	mtrx.Set(3, 2, 6)
+	t.Log(mtrx.Get(0, 0))
+	t.Log(mtrx.Get(3, 2))
+	mtrx.Resize(1, 1)
+	t.Log(mtrx.Size())
+	t.Log(mtrx.Get(0, 0))
+	t.Log(mtrx.Get(3, 2))
 }
