@@ -33,19 +33,11 @@ type SimpleGraph struct {
 }
 
 func (this *SimpleGraph) Vertices() []Vertex {
-	rtns := make([]Vertex, 0, len(this.vertics))
-	for _, v := range this.vertics {
-		rtns = append(rtns, v)
-	}
-	return rtns
+	return this.vertics
 }
 
 func (this *SimpleGraph) Edges() []Edge {
-	rtns := make([]Edge, 0, len(this.edges))
-	for _, e := range this.edges {
-		rtns = append(rtns, e)
-	}
-	return rtns
+	return this.edges
 }
 
 func (this *SimpleGraph) GetVertex(key interface{}) Vertex {
