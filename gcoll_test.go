@@ -205,7 +205,21 @@ func TestSimpleWeightedGraph(t *testing.T) {
 	t.Log("===After Remove Vertex A===")
 	wg.RemoveVertex("A")
 	t.Log(wg)
+}
 
+func TestAdjacencyMatrixGraph(t *testing.T) {
+	amg := NewAdjacencyMatrixGraph()
+	va, _ := amg.AddVertex("A", "A")
+	vb, _ := amg.AddVertex("B", "B")
+	vc, _ := amg.AddVertex("C", "C")
+
+	amg.AddEdgeWithWeight(va, vb, 1, 12)
+	amg.AddEdgeWithWeight(vb, va, 1, 12)
+	amg.AddEdgeWithWeight(vb, vc, 2, 10)
+	amg.AddEdgeWithWeight(vc, vb, 2, 10)
+
+	t.Log("===Initial Adjacency Matrix Graph===")
+	t.Log(amg)
 }
 
 func TestMatrix(t *testing.T) {

@@ -65,3 +65,7 @@ func NewSimpleGraph() graph.Graph {
 func NewWeightedSimpleGraph() graph.WeightedGraph {
 	return graph.NewSimpleWeightedGraph()
 }
+
+func NewAdjacencyMatrixGraph() graph.WeightedGraph {
+	return graph.NewAdjacencyMatrixGraph()
+}

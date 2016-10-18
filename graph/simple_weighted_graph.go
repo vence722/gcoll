@@ -4,13 +4,8 @@
 package graph
 
 import (
-	"errors"
 	"fmt"
 	"math"
-)
-
-var (
-	ERR_ROOT_VERTEX_NOT_EXISTS error = errors.New("Root vertex not exists")
 )
 
 // Implementation of Simple Weighted Graph

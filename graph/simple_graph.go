@@ -4,25 +4,10 @@
 package graph
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/set"
-)
-
-const (
-	ITERATE_METHOD_DFS string = "DFS"
-	ITERATE_METHOD_BFS string = "BFS"
-)
-
-var (
-	ERR_VERTEX_KEY_EXISTS     error = errors.New("Vertex key exists")
-	ERR_VERTEX_KEY_NOT_EXISTS error = errors.New("Vertex key not exists")
-	ERR_EDGE_EXISTS           error = errors.New("Edge exists")
-	ERR_EDGE_NOT_EXISTS       error = errors.New("Edge not exists")
-	ERR_NEIGHBOR_IS_NULL      error = errors.New("Neighbor is null")
-	ERR_NEIGHBOR_NOT_EXISTS   error = errors.New("Neighbor not exists")
 )
 
 // Implementation of Simple Graph

@@ -75,6 +75,18 @@ func (this *LinkedListMatrix) Resize(numRows int, numCols int) error {
 	return nil
 }
 
+func (this *LinkedListMatrix) RemoveAt(index int) error {
+	if index >= this.numRows {
+		return ERR_INDEX_OUT_OF_BOUND
+	}
+	this.rows.RemoveAt(index)
+	for i := 0; i < this.rows.Size(); i++ {
+		row := this.rows.Get(i).(*list.LinkedList)
+		row.RemoveAt(index)
+	}
+	return nil
+}
+
 func NewLinkedMatrix(rows int, columns int) *LinkedListMatrix {
 	matrix := &LinkedListMatrix{rows: list.NewLinkedList()}
 	matrix.Resize(rows, columns)
