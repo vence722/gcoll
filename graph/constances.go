@@ -18,4 +18,5 @@ var (
 	ERR_NEIGHBOR_NOT_EXISTS    error = errors.New("Neighbor not exists")
 	ERR_ROOT_VERTEX_NOT_EXISTS error = errors.New("Root vertex not exists")
 	ERR_INDEX_OUT_OF_BOUND     error = errors.New("Index out of bound")
+	ERR_NODE_EXISTS            error = errors.New("Node exists")
 )

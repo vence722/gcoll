@@ -3,6 +3,10 @@
 // @authors     Vence Lin(vence722@gmail.com)
 package graph
 
+import (
+	"github.com/vence722/gcoll/matrix"
+)
+
 // Basic Graph
 type Graph interface {
 	Vertices() []Vertex
@@ -42,10 +46,37 @@ type WeightedGraph interface {
 	WeightedEdges() []WeightedEdge
 	GetWeightedEdge(x Vertex, y Vertex) WeightedEdge
 	AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error)
-	CreateMinimalSpanningTree(root Vertex) (WeightedGraph, float64, error)
+	GetAdjacencyMatrix() matrix.Matrix
 }
 
 type WeightedEdge interface {
 	Edge
 	Weight() float64
+}
+
+// Path (Can be considered as graph with N vertics and N-1 edges)
+type Path interface {
+	Start() Node
+	Dest() Node
+	Nodes() []Node
+	AddNode(key interface{}, value interface{}) error
+	GetNode(key interface{}) Node
+}
+
+type Node interface {
+	Key() interface{}
+	Value() interface{}
+	Next() Node
+}
+
+// Weighted Path
+type WeightedPath interface {
+	Path
+	TotalWeight() float64
+	AddNodeWithWeight(key interface{}, value interface{}, weight float64) error
+}
+
+type WeightedNode interface {
+	Node
+	WeightToNext() float64
 }

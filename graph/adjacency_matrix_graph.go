@@ -140,8 +140,8 @@ func (this *AdjacencyMatrixGraph) IterateByDFS(startKey interface{}) GraphIterat
 	return nil
 }
 
-func (this *AdjacencyMatrixGraph) CreateMinimalSpanningTree(root Vertex) (WeightedGraph, float64, error) {
-	return nil, 0, nil
+func (this *AdjacencyMatrixGraph) GetAdjacencyMatrix() matrix.Matrix {
+	return this.adjacencyMatrix
 }
 
 func (this *AdjacencyMatrixGraph) String() string {

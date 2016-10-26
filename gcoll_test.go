@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/vence722/gcoll/graph"
+	"github.com/vence722/gcoll/graph/algo"
 	"github.com/vence722/gcoll/list"
 	"github.com/vence722/gcoll/lru"
 	"github.com/vence722/gcoll/matrix"
@@ -201,7 +202,7 @@ func TestSimpleWeightedGraph(t *testing.T) {
 	t.Log("===Initial Simple Weighted Graph===")
 	t.Log(wg)
 	t.Log("===Minial Spanning Tree===")
-	t.Log(wg.CreateMinimalSpanningTree(ve))
+	t.Log(algo.CreateMinimalSpanningTree(wg, ve))
 	t.Log("===After Remove Vertex A===")
 	wg.RemoveVertex("A")
 	t.Log(wg)
