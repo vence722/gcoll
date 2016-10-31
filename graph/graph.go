@@ -56,27 +56,17 @@ type WeightedEdge interface {
 
 // Path (Can be considered as graph with N vertics and N-1 edges)
 type Path interface {
-	Start() Node
+	Src() Node
 	Dest() Node
 	Nodes() []Node
-	AddNode(key interface{}, value interface{}) error
+	AddNode(key interface{}, value interface{}, weight float64) error
 	GetNode(key interface{}) Node
+	TotalWeight() float64
 }
 
 type Node interface {
 	Key() interface{}
 	Value() interface{}
 	Next() Node
-}
-
-// Weighted Path
-type WeightedPath interface {
-	Path
-	TotalWeight() float64
-	AddNodeWithWeight(key interface{}, value interface{}, weight float64) error
-}
-
-type WeightedNode interface {
-	Node
-	WeightToNext() float64
+	WeightToPrev() float64
 }

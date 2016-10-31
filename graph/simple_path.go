@@ -2,12 +2,16 @@ package graph
 
 type SimplePath struct {
 	nodes []Node
-	start Node
+	src   Node
 	dest  Node
 }
 
-func (this *SimplePath) Start() Node {
-	return this.start
+func NewSimplePath() *SimplePath {
+	return &SimplePath{}
+}
+
+func (this *SimplePath) Src() Node {
+	return this.src
 }
 
 func (this *SimplePath) Dest() Node {
@@ -18,11 +22,11 @@ func (this *SimplePath) Nodes() []Node {
 	return this.nodes
 }
 
-func (this *SimplePath) AddNode(key interface{}, value interface{}) error {
+func (this *SimplePath) AddNode(key interface{}, value interface{}, weightToPrev float64) error {
 	if this.GetNode(key) != nil {
 		return ERR_NODE_EXISTS
 	}
-	node := &SimpleNode{key: key, value: value}
+	node := &SimpleNode{key: key, value: value, weightToPrev: weightToPrev}
 	dest := this.dest.(*SimpleNode)
 	dest.next = node
 	this.nodes = append(this.nodes, node)
@@ -38,10 +42,21 @@ func (this *SimplePath) GetNode(key interface{}) Node {
 	return nil
 }
 
+func (this *SimplePath) TotalWeight() float64 {
+	var totalW float64 = 0
+	curr := this.src
+	for curr != nil {
+		totalW += curr.WeightToPrev()
+		curr = curr.Next()
+	}
+	return totalW
+}
+
 type SimpleNode struct {
-	key   interface{}
-	value interface{}
-	next  *SimpleNode
+	key          interface{}
+	value        interface{}
+	next         *SimpleNode
+	weightToPrev float64
 }
 
 func (this *SimpleNode) Key() interface{} {
@@ -54,4 +69,8 @@ func (this *SimpleNode) Value() interface{} {
 
 func (this *SimpleNode) Next() Node {
 	return this.next
+}
+
+func (this *SimpleNode) WeightToPrev() float64 {
+	return this.weightToPrev
 }

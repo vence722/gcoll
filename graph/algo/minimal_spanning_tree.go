@@ -14,7 +14,7 @@ func CreateMinimalSpanningTree(g graph.WeightedGraph, root graph.Vertex) (graph.
 	var rootIndex int = indexVertex(g, root)
 	var totalWeight float64 = 0
 	if rootIndex == -1 {
-		return nil, totalWeight, graph.ERR_ROOT_VERTEX_NOT_EXISTS
+		return nil, totalWeight, graph.ERR_VERTEX_NOT_EXISTS
 	}
 	mst := graph.NewSimpleWeightedGraph()
 	mst.AddVertex(root.Key(), root.Value())
@@ -74,13 +74,4 @@ func CreateMinimalSpanningTree(g graph.WeightedGraph, root graph.Vertex) (graph.
 		}
 	}
 	return mst, totalWeight, nil
-}
-
-func indexVertex(g graph.WeightedGraph, v graph.Vertex) int {
-	for i, vertex := range g.Vertices() {
-		if vertex.Key() == v.Key() {
-			return i
-		}
-	}
-	return -1
 }
