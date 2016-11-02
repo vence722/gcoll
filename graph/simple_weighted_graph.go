@@ -82,7 +82,7 @@ func (this *SimpleWeightedGraph) GetAdjacencyMatrix() matrix.Matrix {
 		adjMtrx[fromIndex][toIndex] = wEdge.weight
 	}
 
-	mtrx := matrix.NewLinkedMatrix(size, size)
+	mtrx := matrix.NewLinkedMatrix(size, size, nil)
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
 			mtrx.Set(i, j, adjMtrx[i][j])

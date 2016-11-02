@@ -1,5 +1,9 @@
 package graph
 
+import (
+	"fmt"
+)
+
 type SimplePath struct {
 	nodes []Node
 	src   Node
@@ -27,9 +31,15 @@ func (this *SimplePath) AddNode(key interface{}, value interface{}, weightToPrev
 		return ERR_NODE_EXISTS
 	}
 	node := &SimpleNode{key: key, value: value, weightToPrev: weightToPrev}
-	dest := this.dest.(*SimpleNode)
-	dest.next = node
 	this.nodes = append(this.nodes, node)
+	if this.src == nil {
+		this.src = node
+		this.dest = node
+	} else {
+		dest := this.dest.(*SimpleNode)
+		dest.next = node
+		this.dest = node
+	}
 	return nil
 }
 
@@ -40,6 +50,18 @@ func (this *SimplePath) GetNode(key interface{}) Node {
 		}
 	}
 	return nil
+}
+
+func (this *SimplePath) String() string {
+	var str string = ""
+	node := this.Src().(*SimpleNode)
+	next := node.Next().(*SimpleNode)
+	for node != nil && next != nil {
+		str += fmt.Sprintf("%s--->%s, weight:%f\n", node.Key(), next.Key(), next.WeightToPrev())
+		node = next
+		next = node.Next().(*SimpleNode)
+	}
+	return str
 }
 
 func (this *SimplePath) TotalWeight() float64 {

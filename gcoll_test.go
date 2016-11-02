@@ -5,6 +5,7 @@ package gcoll
 
 import (
 	"fmt"
+	"math"
 	"testing"
 
 	"github.com/vence722/gcoll/graph"
@@ -60,7 +61,7 @@ func TestLRUCache(t *testing.T) {
 	t.Log(hitsMapLRU.Get("3"))
 	t.Log(hitsMapLRU.Get("bb"))
 
-	// Test insert more tan Cap
+	// Test insert more than Cap
 	hitsMapLRU.Put("cc", 5214)
 	// Item will least hit count removed
 	t.Log(fifoLRU.Get("aa"))
@@ -214,23 +215,29 @@ func TestAdjacencyMatrixGraph(t *testing.T) {
 	vb, _ := amg.AddVertex("B", "B")
 	vc, _ := amg.AddVertex("C", "C")
 
-	amg.AddEdgeWithWeight(va, vb, 1, 12)
-	amg.AddEdgeWithWeight(vb, va, 1, 12)
-	amg.AddEdgeWithWeight(vb, vc, 2, 10)
-	amg.AddEdgeWithWeight(vc, vb, 2, 10)
+	amg.AddEdgeWithWeight(va, vb, 1, 2)
+	amg.AddEdgeWithWeight(vb, va, 1, 2)
+	amg.AddEdgeWithWeight(vb, vc, 2, 2)
+	amg.AddEdgeWithWeight(vc, vb, 2, 2)
+	amg.AddEdgeWithWeight(va, vc, 3, 3)
+	amg.AddEdgeWithWeight(vc, va, 3, 3)
 
 	t.Log("===Initial Adjacency Matrix Graph===")
 	t.Log(amg)
+
+	t.Log("===Calculate Shortest Path===")
+	path, err := algo.Dijkstra(amg, va, vc)
+	t.Log(path, err)
 }
 
 func TestMatrix(t *testing.T) {
-	mtrx := matrix.NewLinkedMatrix(5, 5)
+	mtrx := matrix.NewLinkedMatrix(5, 5, math.MaxFloat64)
 	t.Log(mtrx.Size())
 	mtrx.Set(0, 0, 1)
 	mtrx.Set(3, 2, 6)
 	t.Log(mtrx.Get(0, 0))
 	t.Log(mtrx.Get(3, 2))
-	mtrx.Resize(1, 1)
+	mtrx.Resize(1, 1, math.MaxFloat64)
 	t.Log(mtrx.Size())
 	t.Log(mtrx.Get(0, 0))
 	t.Log(mtrx.Get(3, 2))

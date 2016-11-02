@@ -37,7 +37,7 @@ func (this *LinkedListMatrix) Size() (int, int) {
 	return this.numRows, this.numCols
 }
 
-func (this *LinkedListMatrix) Resize(numRows int, numCols int) error {
+func (this *LinkedListMatrix) Resize(numRows int, numCols int, initVal interface{}) error {
 	if numRows < 0 || numCols < 0 {
 		return ERR_INDEX_OUT_OF_BOUND
 	}
@@ -51,7 +51,7 @@ func (this *LinkedListMatrix) Resize(numRows int, numCols int) error {
 		for i := 0; i < numRows-this.numRows; i++ {
 			row := list.NewLinkedList()
 			for j := 0; j < this.numCols; j++ {
-				row.Add(nil)
+				row.Add(initVal)
 			}
 			this.rows.Add(row)
 		}
@@ -66,7 +66,7 @@ func (this *LinkedListMatrix) Resize(numRows int, numCols int) error {
 			}
 		} else if numCols > this.numCols {
 			for j := 0; j < numCols-this.numCols; j++ {
-				row.Add(nil)
+				row.Add(initVal)
 			}
 		}
 	}
@@ -87,8 +87,8 @@ func (this *LinkedListMatrix) RemoveAt(index int) error {
 	return nil
 }
 
-func NewLinkedMatrix(rows int, columns int) *LinkedListMatrix {
+func NewLinkedMatrix(rows int, columns int, initVal interface{}) *LinkedListMatrix {
 	matrix := &LinkedListMatrix{rows: list.NewLinkedList()}
-	matrix.Resize(rows, columns)
+	matrix.Resize(rows, columns, initVal)
 	return matrix
 }

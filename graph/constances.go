@@ -19,4 +19,5 @@ var (
 	ERR_VERTEX_NOT_EXISTS     error = errors.New("Vertex not exists")
 	ERR_INDEX_OUT_OF_BOUND    error = errors.New("Index out of bound")
 	ERR_NODE_EXISTS           error = errors.New("Node exists")
+	ERR_UNKNOWN               error = errors.New("Unknown error")
 )

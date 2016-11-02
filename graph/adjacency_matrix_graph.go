@@ -12,7 +12,7 @@ type AdjacencyMatrixGraph struct {
 }
 
 func NewAdjacencyMatrixGraph() *AdjacencyMatrixGraph {
-	return &AdjacencyMatrixGraph{adjacencyMatrix: matrix.NewLinkedMatrix(0, 0)}
+	return &AdjacencyMatrixGraph{adjacencyMatrix: matrix.NewLinkedMatrix(0, 0, nil)}
 }
 
 func (this *AdjacencyMatrixGraph) Vertices() []Vertex {
@@ -73,7 +73,7 @@ func (this *AdjacencyMatrixGraph) AddVertex(key interface{}, value interface{}) 
 
 	// Need to expand the adjacency matrix
 	sizeRows, sizeCols := this.adjacencyMatrix.Size()
-	this.adjacencyMatrix.Resize(sizeRows+1, sizeCols+1)
+	this.adjacencyMatrix.Resize(sizeRows+1, sizeCols+1, nil)
 
 	return v, nil
 }
@@ -109,6 +109,9 @@ func (this *AdjacencyMatrixGraph) GetEdge(x Vertex, y Vertex) Edge {
 func (this *AdjacencyMatrixGraph) GetWeightedEdge(x Vertex, y Vertex) WeightedEdge {
 	xIndex, yIndex := this.indexEdge(x, y)
 	if xIndex == -1 || yIndex == -1 {
+		return nil
+	}
+	if this.adjacencyMatrix.Get(xIndex, yIndex) == nil {
 		return nil
 	}
 	return this.adjacencyMatrix.Get(xIndex, yIndex).(WeightedEdge)
