@@ -204,30 +204,39 @@ func TestSimpleWeightedGraph(t *testing.T) {
 	t.Log(wg)
 	t.Log("===Minial Spanning Tree===")
 	t.Log(algo.CreateMinimalSpanningTree(wg, ve))
-	t.Log("===After Remove Vertex A===")
-	wg.RemoveVertex("A")
-	t.Log(wg)
+
+	t.Log("===Calculate Shortest Path===")
+	path, err := algo.Dijkstra(wg, va, vc)
+	t.Log(path, "total weight:", path.TotalWeight(), err)
 }
 
 func TestAdjacencyMatrixGraph(t *testing.T) {
-	amg := NewAdjacencyMatrixGraph()
-	va, _ := amg.AddVertex("A", "A")
-	vb, _ := amg.AddVertex("B", "B")
-	vc, _ := amg.AddVertex("C", "C")
+	wg := NewAdjacencyMatrixGraph()
+	va, _ := wg.AddVertex("A", "A")
+	vb, _ := wg.AddVertex("B", "B")
+	vc, _ := wg.AddVertex("C", "C")
+	vd, _ := wg.AddVertex("D", "D")
+	ve, _ := wg.AddVertex("E", "E")
 
-	amg.AddEdgeWithWeight(va, vb, 1, 2)
-	amg.AddEdgeWithWeight(vb, va, 1, 2)
-	amg.AddEdgeWithWeight(vb, vc, 2, 2)
-	amg.AddEdgeWithWeight(vc, vb, 2, 2)
-	amg.AddEdgeWithWeight(va, vc, 3, 3)
-	amg.AddEdgeWithWeight(vc, va, 3, 3)
+	wg.AddEdgeWithWeight(va, vb, nil, 11)
+	wg.AddEdgeWithWeight(vb, va, nil, 11)
+	wg.AddEdgeWithWeight(va, vc, nil, 10)
+	wg.AddEdgeWithWeight(vc, va, nil, 10)
+	wg.AddEdgeWithWeight(va, ve, nil, 20)
+	wg.AddEdgeWithWeight(ve, va, nil, 20)
+	wg.AddEdgeWithWeight(vb, vc, nil, 10)
+	wg.AddEdgeWithWeight(vc, vb, nil, 10)
+	wg.AddEdgeWithWeight(vc, vd, nil, 11)
+	wg.AddEdgeWithWeight(vd, vc, nil, 11)
+	wg.AddEdgeWithWeight(vd, ve, nil, 8)
+	wg.AddEdgeWithWeight(ve, vd, nil, 8)
 
 	t.Log("===Initial Adjacency Matrix Graph===")
-	t.Log(amg)
+	t.Log(wg)
 
 	t.Log("===Calculate Shortest Path===")
-	path, err := algo.Dijkstra(amg, va, vc)
-	t.Log(path, err)
+	path, err := algo.Dijkstra(wg, va, vc)
+	t.Log(path, "total weight:", path.TotalWeight(), err)
 }
 
 func TestMatrix(t *testing.T) {

@@ -2,6 +2,7 @@ package graph
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type SimplePath struct {
@@ -67,7 +68,7 @@ func (this *SimplePath) String() string {
 func (this *SimplePath) TotalWeight() float64 {
 	var totalW float64 = 0
 	curr := this.src
-	for curr != nil {
+	for !reflect.ValueOf(curr).IsNil() {
 		totalW += curr.WeightToPrev()
 		curr = curr.Next()
 	}

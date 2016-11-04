@@ -5,7 +5,6 @@ package graph
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/vence722/gcoll/matrix"
 )
@@ -52,11 +51,11 @@ func (this *SimpleWeightedGraph) String() string {
 func (this *SimpleWeightedGraph) GetAdjacencyMatrix() matrix.Matrix {
 	size := len(this.vertics)
 	// initialize adjacency matrix
-	adjMtrx := make([][]float64, size)
+	adjMtrx := make([][]*SimpleWeightedEdge, size)
 	for i := 0; i < size; i++ {
-		adjMtrx[i] = make([]float64, size)
-		for j := 0; j < size; j++ {
-			adjMtrx[i][j] = math.MaxFloat64
+		adjMtrx[i] = make([]*SimpleWeightedEdge, size)
+		for j := 0; j < len(adjMtrx[i]); j++ {
+			adjMtrx[i][j] = nil
 		}
 	}
 	// for each edge, update the adjacency matrix
@@ -79,7 +78,7 @@ func (this *SimpleWeightedGraph) GetAdjacencyMatrix() matrix.Matrix {
 				break
 			}
 		}
-		adjMtrx[fromIndex][toIndex] = wEdge.weight
+		adjMtrx[fromIndex][toIndex] = wEdge
 	}
 
 	mtrx := matrix.NewLinkedMatrix(size, size, nil)

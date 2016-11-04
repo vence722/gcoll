@@ -2,6 +2,7 @@ package algo
 
 import (
 	"math"
+	"reflect"
 
 	"github.com/vence722/gcoll/graph"
 )
@@ -40,8 +41,9 @@ func CreateMinimalSpanningTree(g graph.WeightedGraph, root graph.Vertex) (graph.
 				distToMST := math.MaxFloat64
 				distMSTIndex := -1
 				for _, index := range indexVec {
-					if adjMtrx.Get(i, index).(float64) < distToMST {
-						distToMST = adjMtrx.Get(i, index).(float64)
+					wEdge := adjMtrx.Get(i, index).(graph.WeightedEdge)
+					if wEdge != nil && !reflect.ValueOf(wEdge).IsNil() && wEdge.Weight() < distToMST {
+						distToMST = wEdge.Weight()
 						distMSTIndex = index
 					}
 				}

@@ -2,10 +2,16 @@ package algo
 
 import (
 	"math"
+	"reflect"
 
 	"github.com/vence722/gcoll/graph"
 	"github.com/vence722/gcoll/list"
 )
+
+type traceEntry struct {
+	fromIndex int
+	toIndex   int
+}
 
 func Dijkstra(wg graph.WeightedGraph, src graph.Vertex, dest graph.Vertex) (graph.Path, error) {
 	srcIndex := indexVertex(wg, src)
@@ -15,9 +21,14 @@ func Dijkstra(wg graph.WeightedGraph, src graph.Vertex, dest graph.Vertex) (grap
 	}
 	shortestPath := graph.NewSimplePath()
 	shortestPath.AddNode(src.Key(), src.Value(), 0)
-	shortestEdges := []graph.WeightedEdge{}
 
 	numVertics := len(wg.Vertices())
+
+	// trace vector for tracing the shortest path
+	traceVec := make([]int, numVertics)
+	for i := 0; i < len(traceVec); i++ {
+		traceVec[i] = -1
+	}
 
 	// calculate the adjacency matrix
 	adjMatrix := wg.GetAdjacencyMatrix()
@@ -57,8 +68,15 @@ func Dijkstra(wg graph.WeightedGraph, src graph.Vertex, dest graph.Vertex) (grap
 				}
 
 				// update distance if the path through "nearest" vertex is nearer than the direct path
-				if distVec[nearest]+adjMatrix.Get(nearest, i).(*graph.SimpleWeightedEdge).Weight() < distVec[i] {
+				wEdge := adjMatrix.Get(nearest, i).(graph.WeightedEdge)
+				if wEdge != nil && !reflect.ValueOf(wEdge).IsNil() && distVec[nearest]+wEdge.Weight() < distVec[i] {
 					distVec[i] = distVec[nearest] + adjMatrix.Get(nearest, i).(*graph.SimpleWeightedEdge).Weight()
+
+					// update trace vector
+					if i != nearest {
+						traceVec[i] = nearest
+					}
+
 					distVecUpdated = true
 				}
 			}
@@ -74,12 +92,6 @@ func Dijkstra(wg graph.WeightedGraph, src graph.Vertex, dest graph.Vertex) (grap
 			if vertex == nil || vertex.Key() == nil || vertex.Key() == lastVertex.Key() {
 				continue
 			}
-
-			edge := wg.GetWeightedEdge(lastVertex, vertex)
-			if edge == nil {
-				return nil, graph.ERR_UNKNOWN
-			}
-			shortestEdges = append(shortestEdges, edge)
 		}
 
 		// if no change in distVec, break the loop
@@ -88,21 +100,28 @@ func Dijkstra(wg graph.WeightedGraph, src graph.Vertex, dest graph.Vertex) (grap
 		}
 	}
 
-	// convert shortestEdges to shortestPath
+	// convert traceVec to shortestPath
 	stack := list.NewLinkedList()
-	var currKey string = dest.Key().(string)
-	for currKey != src.Key() {
-		for _, edge := range shortestEdges {
-			if edge.To().Key() == currKey {
-				stack.Push(edge)
-				currKey = edge.From().Key().(string)
-				break
-			}
-		}
+	toIndex := destIndex
+	fromIndex := traceVec[toIndex]
+	for fromIndex != -1 {
+		stack.Push(&traceEntry{fromIndex: fromIndex, toIndex: toIndex})
+		toIndex = fromIndex
+		fromIndex = traceVec[toIndex]
 	}
+
 	for !stack.IsEmpty() {
-		edge := stack.Pop().(graph.WeightedEdge)
-		shortestPath.AddNode(edge.To().Key(), edge.To().Value(), edge.Weight())
+		entry := stack.Pop().(*traceEntry)
+		fromVertex := wg.Vertices()[entry.fromIndex]
+		toVertex := wg.Vertices()[entry.toIndex]
+		edge := wg.GetWeightedEdge(fromVertex, toVertex)
+
+		var weight float64 = 0
+		if edge != nil {
+			weight = edge.Weight()
+		}
+
+		shortestPath.AddNode(toVertex.Key(), toVertex.Value(), weight)
 	}
 
 	return shortestPath, nil
