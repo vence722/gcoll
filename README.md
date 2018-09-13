@@ -1,7 +1,7 @@
 gcoll --- go collection library
 =====
 
-gcoll is a Java-like collection library in Go language. It contains useful data structures like Lists, Maps and Sets, as well as some higer-level Containers---such as Stacks, Queues, Trees and Heaps. In version 1.1, LRU Cache is also provided.
+A collection library of the most frequently used data structures in Go programing language.
 
 Installation
 -----
