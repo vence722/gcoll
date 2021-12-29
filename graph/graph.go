@@ -4,7 +4,7 @@
 package graph
 
 import (
-	"github.com/vence722/gcoll/matrix"
+	"gcoll/matrix"
 )
 
 // Basic Graph

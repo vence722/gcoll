@@ -6,8 +6,8 @@ package graph
 import (
 	"fmt"
 
-	"github.com/vence722/gcoll/list"
-	"github.com/vence722/gcoll/set"
+	"gcoll/list"
+	"gcoll/set"
 )
 
 // Implementation of Simple Graph

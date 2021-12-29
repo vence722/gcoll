@@ -4,8 +4,8 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/vence722/gcoll/graph"
-	"github.com/vence722/gcoll/list"
+	"gcoll/graph"
+	"gcoll/list"
 )
 
 type traceEntry struct {

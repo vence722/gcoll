@@ -4,7 +4,7 @@
 
 package set
 
-import "github.com/vence722/gcoll/collection"
+import "gcoll/collection"
 
 type Set interface {
 	collection.Collection

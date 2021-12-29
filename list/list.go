@@ -5,7 +5,7 @@
 package list
 
 import (
-	"github.com/vence722/gcoll/collection"
+	"gcoll/collection"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/vence722/gcoll/graph"
+	"gcoll/graph"
 )
 
 // Build the minimal spanning tree from the graph with Prim Algorithm

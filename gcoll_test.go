@@ -8,12 +8,12 @@ import (
 	"math"
 	"testing"
 
-	"github.com/vence722/gcoll/graph"
-	"github.com/vence722/gcoll/graph/algo"
-	"github.com/vence722/gcoll/list"
-	"github.com/vence722/gcoll/lru"
-	"github.com/vence722/gcoll/matrix"
-	"github.com/vence722/gcoll/tree"
+	"gcoll/graph"
+	"gcoll/graph/algo"
+	"gcoll/list"
+	"gcoll/lru"
+	"gcoll/matrix"
+	"gcoll/tree"
 )
 
 func TestList(t *testing.T) {

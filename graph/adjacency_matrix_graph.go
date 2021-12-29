@@ -3,7 +3,7 @@ package graph
 import (
 	"fmt"
 
-	"github.com/vence722/gcoll/matrix"
+	"gcoll/matrix"
 )
 
 type AdjacencyMatrixGraph struct {

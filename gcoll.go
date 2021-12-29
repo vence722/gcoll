@@ -4,13 +4,13 @@
 package gcoll
 
 import (
-	"github.com/vence722/gcoll/graph"
-	"github.com/vence722/gcoll/heap"
-	"github.com/vence722/gcoll/list"
-	"github.com/vence722/gcoll/lru"
-	"github.com/vence722/gcoll/maps"
-	"github.com/vence722/gcoll/set"
-	"github.com/vence722/gcoll/tree"
+	"gcoll/graph"
+	"gcoll/heap"
+	"gcoll/list"
+	"gcoll/lru"
+	"gcoll/maps"
+	"gcoll/set"
+	"gcoll/tree"
 )
 
 func NewArrayList() list.List {

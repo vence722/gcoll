@@ -7,7 +7,7 @@ package list
 import (
 	"fmt"
 
-	"github.com/vence722/gcoll/collection"
+	"gcoll/collection"
 )
 
 // The ArrayList sturct

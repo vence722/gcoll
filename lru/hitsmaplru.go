@@ -7,7 +7,7 @@ package lru
 import (
 	"sync"
 
-	"github.com/vence722/gcoll/maps"
+	"gcoll/maps"
 )
 
 // Data entry with hits counter

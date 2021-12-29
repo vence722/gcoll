@@ -6,7 +6,7 @@ package lru
 import (
 	"sync"
 
-	"github.com/vence722/gcoll/list"
+	"gcoll/list"
 )
 
 // LRU Cache implementation of Fifo Queue

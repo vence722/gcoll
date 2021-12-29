@@ -6,7 +6,7 @@ package graph
 import (
 	"fmt"
 
-	"github.com/vence722/gcoll/matrix"
+	"gcoll/matrix"
 )
 
 // Implementation of Simple Weighted Graph

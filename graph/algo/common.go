@@ -1,7 +1,7 @@
 package algo
 
 import (
-	"github.com/vence722/gcoll/graph"
+	"gcoll/graph"
 )
 
 func indexVertex(g graph.WeightedGraph, v graph.Vertex) int {

@@ -3,7 +3,7 @@ package matrix
 import (
 	"errors"
 
-	"github.com/vence722/gcoll/list"
+	"gcoll/list"
 )
 
 var (

@@ -5,8 +5,8 @@
 package tree
 
 import (
-	"github.com/vence722/gcoll/list"
-	"github.com/vence722/gcoll/maps"
+	"gcoll/list"
+	"gcoll/maps"
 )
 
 // The BinarySortTree struct
