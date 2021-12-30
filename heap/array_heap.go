@@ -45,8 +45,8 @@ func NewArrayHeap() *ArrayHeap {
 	return h
 }
 
-func (this *ArrayHeap) Put(elem Comparable) {
-	cheap.Push(this.internal, elem)
+func (this *ArrayHeap) Put(ele Comparable) {
+	cheap.Push(this.internal, ele)
 }
 
 func (this *ArrayHeap) Top() Comparable {

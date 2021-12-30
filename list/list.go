@@ -16,11 +16,11 @@ const (
 // List The list interface
 type List[T comparable] interface {
 	collection.Collection[T]
-	Get(index int) (elem T, ok bool)
+	Get(index int) (ele T, ok bool)
 	MustGet(index int) T
 	Set(index int, ele T) bool
 	Insert(index int, ele T) bool
-	RemoveAt(index int) (elem T, ok bool)
+	RemoveAt(index int) (ele T, ok bool)
 	IndexOf(ele T) int
 	LastIndexOf(ele T) int
 	SubList(fromIndex, toIndex int) List[T]
@@ -30,15 +30,15 @@ type List[T comparable] interface {
 type Queue[T comparable] interface {
 	List[T]
 	EnQueue(ele T) bool
-	DeQueue() (elem T, ok bool)
-	Front() T
-	Tail() T
+	DeQueue() (ele T, ok bool)
+	Front() (ele T, ok bool)
+	Tail() (ele T, ok bool)
 }
 
 // The Stack interface
 type Stack[T comparable] interface {
 	List[T]
 	Push(ele T) bool
-	Pop() T
-	Top() T
+	Pop() (ele T, ok bool)
+	Top() (ele T, ok bool)
 }

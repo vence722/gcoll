@@ -16,7 +16,7 @@ type Comparable interface {
 // The generic heap interface
 type Heap interface {
 	// Put
-	Put(elem Comparable)
+	Put(ele Comparable)
 	// See the top element without taking it
 	Top() Comparable
 	// Take the top element

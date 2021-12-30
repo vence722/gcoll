@@ -91,15 +91,15 @@ func (this *FifoLRUCache) eliminate() {
 // Loop the Fifo queue and find the element by key
 func (this *FifoLRUCache) findByKey(key any) (bool, *entry) {
 	found := false
-	var elem *entry
+	var ele *entry
 	it := this.fifoQueue.Iterate()
 	for it.HasNext() {
 		e := it.Next().(*entry)
 		if e.key == key {
 			found = true
-			elem = e
+			ele = e
 			break
 		}
 	}
-	return found, elem
+	return found, ele
 }

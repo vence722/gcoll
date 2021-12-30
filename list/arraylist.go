@@ -43,8 +43,8 @@ func (list *ArrayList[T]) Contains(ele T) bool {
 // ToSlice Returns a slice containing all the elements in this list
 func (list *ArrayList[T]) ToSlice() []T {
 	slice := make([]T, InitLen, InitCap)
-	for _, elem := range list.elems {
-		slice = append(slice, elem)
+	for _, ele := range list.elems {
+		slice = append(slice, ele)
 	}
 	return slice
 }
@@ -108,8 +108,8 @@ func (list *ArrayList[T]) Clear() {
 }
 
 // Get Returns the element at the specified position in this list
-// Returns elem = empty value, ok = false if the index specified is invalid
-func (list *ArrayList[T]) Get(index int) (elem T, ok bool) {
+// Returns ele = empty value, ok = false if the index specified is invalid
+func (list *ArrayList[T]) Get(index int) (T, bool) {
 	if index < 0 || index >= list.Size() {
 		var zero T
 		return zero, false
@@ -120,8 +120,8 @@ func (list *ArrayList[T]) Get(index int) (elem T, ok bool) {
 // MustGet Returns the element at the specified position in this list
 // Returns empty value if the index specified is invalid
 func (list *ArrayList[T]) MustGet(index int) T {
-	elem, _ := list.Get(index)
-	return elem
+	ele, _ := list.Get(index)
+	return ele
 }
 
 // Set Modifies the element at the specified position in this list with the new one
@@ -148,7 +148,7 @@ func (list *ArrayList[T]) Insert(index int, ele T) bool {
 }
 
 // RemoveAt Removes the element at the specified position in this list
-func (list *ArrayList[T]) RemoveAt(index int) (elem T, ok bool) {
+func (list *ArrayList[T]) RemoveAt(index int) (T, bool) {
 	if index < 0 || index >= list.Size() {
 		var zero T
 		return zero, false
@@ -195,7 +195,7 @@ func (list *ArrayList[T]) SubList(fromIndex, toIndex int) List[T] {
 	return &ArrayList[T]{list.elems[fromIndex:toIndex]}
 }
 
-// String Returns the string that describes the contains of this list
+// String Returns the string that describes the contents of this list
 func (list *ArrayList[T]) String() string {
 	return fmt.Sprint(list.elems)
 }

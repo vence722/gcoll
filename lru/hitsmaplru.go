@@ -40,9 +40,9 @@ func NewHitsMapLRUCache(capacity int) *HitsMapLRUCache {
 func (this *HitsMapLRUCache) Put(key any, value any) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	elem := this.hitsMap.Get(key)
-	if elem != nil {
-		ent := elem.(*hitsEntry)
+	ele := this.hitsMap.Get(key)
+	if ele != nil {
+		ent := ele.(*hitsEntry)
 		ent.value = value
 		// clear hits count
 		ent.hits = 0
@@ -61,9 +61,9 @@ func (this *HitsMapLRUCache) Put(key any, value any) {
 func (this *HitsMapLRUCache) Get(key any) any {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
-	elem := this.hitsMap.Get(key)
-	if elem != nil {
-		ent := elem.(*hitsEntry)
+	ele := this.hitsMap.Get(key)
+	if ele != nil {
+		ent := ele.(*hitsEntry)
 		// update hits counter
 		ent.hits++
 		return ent.value
@@ -95,14 +95,14 @@ func (this *HitsMapLRUCache) eliminate() {
 		// LRU Cache is full, remove the one of the least used entry
 		// from the cache
 		var leastUsed *hitsEntry
-		for _, elem := range this.hitsMap.Entries() {
+		for _, ele := range this.hitsMap.Entries() {
 			if leastUsed != nil {
-				he := elem.Value.(*hitsEntry)
+				he := ele.Value.(*hitsEntry)
 				if he.hits < leastUsed.hits {
-					leastUsed = elem.Value.(*hitsEntry)
+					leastUsed = ele.Value.(*hitsEntry)
 				}
 			} else {
-				leastUsed = elem.Value.(*hitsEntry)
+				leastUsed = ele.Value.(*hitsEntry)
 			}
 		}
 		// Remove the least used entry
