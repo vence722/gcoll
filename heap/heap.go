@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package heap
 
@@ -10,7 +10,7 @@ const (
 
 // The element need to be comparable in the Heap structure
 type Comparable interface {
-	CompareTo(x interface{}) int
+	CompareTo(x any) int
 }
 
 // The generic heap interface

@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package graph
 
@@ -11,26 +11,26 @@ import (
 type Graph interface {
 	Vertices() []Vertex
 	Edges() []Edge
-	GetVertex(key interface{}) Vertex
-	AddVertex(key interface{}, value interface{}) (Vertex, error)
-	RemoveVertex(key interface{}) error
+	GetVertex(key any) Vertex
+	AddVertex(key any, value any) (Vertex, error)
+	RemoveVertex(key any) error
 	GetEdge(x Vertex, y Vertex) Edge
-	AddEdge(x Vertex, y Vertex, value interface{}) (Edge, error)
+	AddEdge(x Vertex, y Vertex, value any) (Edge, error)
 	RemoveEdge(x Vertex, y Vertex) error
-	IterateByBFS(startKey interface{}) GraphIterator
-	IterateByDFS(startKey interface{}) GraphIterator
+	IterateByBFS(startKey any) GraphIterator
+	IterateByDFS(startKey any) GraphIterator
 }
 
 type Vertex interface {
-	Key() interface{}
-	Value() interface{}
+	Key() any
+	Value() any
 	Neighbors() []Vertex
 	AddNeighbor(neighbor Vertex) error
 	RemoveNeighbor(neighbor Vertex) error
 }
 
 type Edge interface {
-	Value() interface{}
+	Value() any
 	From() Vertex
 	To() Vertex
 }
@@ -45,7 +45,7 @@ type WeightedGraph interface {
 	Graph
 	WeightedEdges() []WeightedEdge
 	GetWeightedEdge(x Vertex, y Vertex) WeightedEdge
-	AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error)
+	AddEdgeWithWeight(x Vertex, y Vertex, value any, weight float64) (WeightedEdge, error)
 	GetAdjacencyMatrix() matrix.Matrix
 }
 
@@ -59,14 +59,14 @@ type Path interface {
 	Src() Node
 	Dest() Node
 	Nodes() []Node
-	AddNode(key interface{}, value interface{}, weight float64) error
-	GetNode(key interface{}) Node
+	AddNode(key any, value any, weight float64) error
+	GetNode(key any) Node
 	TotalWeight() float64
 }
 
 type Node interface {
-	Key() interface{}
-	Value() interface{}
+	Key() any
+	Value() any
 	Next() Node
 	WeightToPrev() float64
 }

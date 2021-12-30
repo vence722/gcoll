@@ -55,7 +55,7 @@ func (this *AdjacencyMatrixGraph) WeightedEdges() []WeightedEdge {
 	return edges
 }
 
-func (this *AdjacencyMatrixGraph) GetVertex(key interface{}) Vertex {
+func (this *AdjacencyMatrixGraph) GetVertex(key any) Vertex {
 	for _, v := range this.vertics {
 		if v.Key() == key {
 			return v
@@ -64,7 +64,7 @@ func (this *AdjacencyMatrixGraph) GetVertex(key interface{}) Vertex {
 	return nil
 }
 
-func (this *AdjacencyMatrixGraph) AddVertex(key interface{}, value interface{}) (Vertex, error) {
+func (this *AdjacencyMatrixGraph) AddVertex(key any, value any) (Vertex, error) {
 	if this.GetVertex(key) != nil {
 		return nil, ERR_VERTEX_KEY_EXISTS
 	}
@@ -78,7 +78,7 @@ func (this *AdjacencyMatrixGraph) AddVertex(key interface{}, value interface{}) 
 	return v, nil
 }
 
-func (this *AdjacencyMatrixGraph) RemoveVertex(key interface{}) error {
+func (this *AdjacencyMatrixGraph) RemoveVertex(key any) error {
 	var index int = -1
 	for i, v := range this.vertics {
 		if v.Key() == key {
@@ -117,11 +117,11 @@ func (this *AdjacencyMatrixGraph) GetWeightedEdge(x Vertex, y Vertex) WeightedEd
 	return this.adjacencyMatrix.Get(xIndex, yIndex).(WeightedEdge)
 }
 
-func (this *AdjacencyMatrixGraph) AddEdge(x Vertex, y Vertex, value interface{}) (Edge, error) {
+func (this *AdjacencyMatrixGraph) AddEdge(x Vertex, y Vertex, value any) (Edge, error) {
 	return this.AddEdgeWithWeight(x, y, value, 0)
 }
 
-func (this *AdjacencyMatrixGraph) AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error) {
+func (this *AdjacencyMatrixGraph) AddEdgeWithWeight(x Vertex, y Vertex, value any, weight float64) (WeightedEdge, error) {
 	xIndex, yIndex := this.indexEdge(x, y)
 	if xIndex == -1 || yIndex == -1 {
 		return nil, ERR_INDEX_OUT_OF_BOUND
@@ -135,11 +135,11 @@ func (this *AdjacencyMatrixGraph) RemoveEdge(x Vertex, y Vertex) error {
 	return nil
 }
 
-func (this *AdjacencyMatrixGraph) IterateByBFS(startKey interface{}) GraphIterator {
+func (this *AdjacencyMatrixGraph) IterateByBFS(startKey any) GraphIterator {
 	return nil
 }
 
-func (this *AdjacencyMatrixGraph) IterateByDFS(startKey interface{}) GraphIterator {
+func (this *AdjacencyMatrixGraph) IterateByDFS(startKey any) GraphIterator {
 	return nil
 }
 
@@ -155,7 +155,7 @@ func (this *AdjacencyMatrixGraph) String() string {
 	return str
 }
 
-func (this *AdjacencyMatrixGraph) indexVertex(key interface{}) int {
+func (this *AdjacencyMatrixGraph) indexVertex(key any) int {
 	for i, v := range this.vertics {
 		if v.Key() == key {
 			return i
@@ -171,16 +171,16 @@ func (this *AdjacencyMatrixGraph) indexEdge(x Vertex, y Vertex) (int, int) {
 }
 
 type AdjacencyMatrixVertex struct {
-	key       interface{}
-	value     interface{}
+	key       any
+	value     any
 	neighbors []Vertex
 }
 
-func (this *AdjacencyMatrixVertex) Key() interface{} {
+func (this *AdjacencyMatrixVertex) Key() any {
 	return this.key
 }
 
-func (this *AdjacencyMatrixVertex) Value() interface{} {
+func (this *AdjacencyMatrixVertex) Value() any {
 	return this.value
 }
 

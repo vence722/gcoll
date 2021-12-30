@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package tree
@@ -22,5 +22,5 @@ type TreeNode struct {
 	left   *TreeNode
 	right  *TreeNode
 	key    string
-	value  interface{}
+	value  any
 }

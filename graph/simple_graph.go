@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package graph
 
@@ -25,7 +25,7 @@ func (this *SimpleGraph) Edges() []Edge {
 	return this.edges
 }
 
-func (this *SimpleGraph) GetVertex(key interface{}) Vertex {
+func (this *SimpleGraph) GetVertex(key any) Vertex {
 	for _, vertex := range this.vertics {
 		if vertex.Key() == key {
 			return vertex
@@ -34,7 +34,7 @@ func (this *SimpleGraph) GetVertex(key interface{}) Vertex {
 	return nil
 }
 
-func (this *SimpleGraph) AddVertex(key interface{}, value interface{}) (Vertex, error) {
+func (this *SimpleGraph) AddVertex(key any, value any) (Vertex, error) {
 	if this.GetVertex(key) != nil {
 		return nil, ERR_VERTEX_KEY_EXISTS
 	}
@@ -44,7 +44,7 @@ func (this *SimpleGraph) AddVertex(key interface{}, value interface{}) (Vertex, 
 }
 
 // Remove vertex with specified key, and delete the edges related to it
-func (this *SimpleGraph) RemoveVertex(key interface{}) error {
+func (this *SimpleGraph) RemoveVertex(key any) error {
 	var vertex Vertex = nil
 	for i, v := range this.vertics {
 		if v.Key() == key {
@@ -73,7 +73,7 @@ func (this *SimpleGraph) GetEdge(x Vertex, y Vertex) Edge {
 	return nil
 }
 
-func (this *SimpleGraph) AddEdge(x Vertex, y Vertex, value interface{}) (Edge, error) {
+func (this *SimpleGraph) AddEdge(x Vertex, y Vertex, value any) (Edge, error) {
 	if this.GetEdge(x, y) != nil {
 		return nil, ERR_EDGE_EXISTS
 	}
@@ -96,7 +96,7 @@ func (this *SimpleGraph) RemoveEdge(x Vertex, y Vertex) error {
 }
 
 // Breadth-first Search Iteration
-func (this *SimpleGraph) IterateByBFS(startKey interface{}) GraphIterator {
+func (this *SimpleGraph) IterateByBFS(startKey any) GraphIterator {
 	var startVertex *SimpleVertex
 	if startKey != nil {
 		v := this.GetVertex(startKey)
@@ -112,7 +112,7 @@ func (this *SimpleGraph) IterateByBFS(startKey interface{}) GraphIterator {
 }
 
 // Depth-First Search Iteration
-func (this *SimpleGraph) IterateByDFS(startKey interface{}) GraphIterator {
+func (this *SimpleGraph) IterateByDFS(startKey any) GraphIterator {
 	var startVertex *SimpleVertex
 	if startKey != nil {
 		v := this.GetVertex(startKey)
@@ -185,16 +185,16 @@ func NewSimpleGraph() *SimpleGraph {
 
 // Implementation of Simple Vertex
 type SimpleVertex struct {
-	key       interface{}
-	value     interface{}
+	key       any
+	value     any
 	neighbors []Vertex
 }
 
-func (this *SimpleVertex) Key() interface{} {
+func (this *SimpleVertex) Key() any {
 	return this.key
 }
 
-func (this *SimpleVertex) Value() interface{} {
+func (this *SimpleVertex) Value() any {
 	return this.value
 }
 
@@ -228,10 +228,10 @@ func (this *SimpleVertex) RemoveNeighbor(neighbor Vertex) error {
 type SimpleEdge struct {
 	from  Vertex
 	to    Vertex
-	value interface{}
+	value any
 }
 
-func (this *SimpleEdge) Value() interface{} {
+func (this *SimpleEdge) Value() any {
 	return this.value
 }
 

@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package heap
 
@@ -27,11 +27,11 @@ func (h *arrayHeap) Swap(i, j int) {
 	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
 }
 
-func (h *arrayHeap) Push(x interface{}) {
+func (h *arrayHeap) Push(x any) {
 	*h = append(*h, x.(Comparable))
 }
 
-func (h *arrayHeap) Pop() interface{} {
+func (h *arrayHeap) Pop() any {
 	n := len(*h)
 	x := (*h)[n-1]
 	*h = (*h)[0 : n-1]

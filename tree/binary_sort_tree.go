@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package tree
@@ -36,7 +36,7 @@ func (this *BinarySortTree) ContainsKey(key string) bool {
 }
 
 // Return the map conaining specified value or not
-func (this *BinarySortTree) ContainsValue(value interface{}) bool {
+func (this *BinarySortTree) ContainsValue(value any) bool {
 	stack := list.NewLinkedList()
 	if this.root != nil {
 		stack.Push(this.root)
@@ -50,7 +50,7 @@ func (this *BinarySortTree) ContainsValue(value interface{}) bool {
 	return false
 }
 
-func goNode(stack list.Stack, node *TreeNode, value interface{}) bool {
+func goNode(stack list.Stack, node *TreeNode, value any) bool {
 	if node != nil {
 		if node.value == value {
 			return true
@@ -66,7 +66,7 @@ func goNode(stack list.Stack, node *TreeNode, value interface{}) bool {
 }
 
 // Add new key value pair to this map
-func (this *BinarySortTree) Put(key string, value interface{}) bool {
+func (this *BinarySortTree) Put(key string, value any) bool {
 	if this.root != nil {
 		p := this.root
 		for {
@@ -102,7 +102,7 @@ func (this *BinarySortTree) Put(key string, value interface{}) bool {
 }
 
 // Return the element with the specified key in this map
-func (this *BinarySortTree) Get(key string) interface{} {
+func (this *BinarySortTree) Get(key string) any {
 	if this.root == nil {
 		return nil
 	}
@@ -219,7 +219,7 @@ func goNodeKeys(stack list.Stack, node *TreeNode, keys list.List) {
 }
 
 // Return a list containing all the values in the map
-func (this *BinarySortTree) Values() []interface{} {
+func (this *BinarySortTree) Values() []any {
 	values := list.NewArrayList()
 	stack := list.NewLinkedList()
 	if this.root != nil {
@@ -229,7 +229,7 @@ func (this *BinarySortTree) Values() []interface{} {
 			goNodeValues(stack, pn, values)
 		}
 	}
-	svalues := make([]interface{}, INIT_LEN, INIT_CAP)
+	svalues := make([]any, INIT_LEN, INIT_CAP)
 	for i := 0; i < values.Size(); i++ {
 		svalues = append(svalues, values.Get(i))
 	}

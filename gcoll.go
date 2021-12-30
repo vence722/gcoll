@@ -1,6 +1,7 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
+
 package gcoll
 
 import (
@@ -13,20 +14,20 @@ import (
 	"gcoll/tree"
 )
 
-func NewArrayList() list.List {
-	return list.NewArrayList()
+func NewArrayList[T comparable]() list.List[T] {
+	return list.NewArrayList[T]()
 }
 
-func NewLinkedList() list.List {
-	return list.NewLinkedList()
+func NewLinkedList[T comparable]() list.List[T] {
+	return list.NewLinkedList[T]()
 }
 
-func NewQueue() list.Queue {
-	return list.NewLinkedList()
+func NewQueue[T comparable]() list.Queue[T] {
+	return list.NewLinkedList[T]()
 }
 
-func NewStack() list.Stack {
-	return list.NewLinkedList()
+func NewStack[T comparable]() list.Stack[T] {
+	return list.NewLinkedList[T]()
 }
 
 func NewHashMap() maps.Map {

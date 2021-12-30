@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package list
@@ -9,35 +9,36 @@ import (
 )
 
 const (
-	INIT_LEN = 0
-	INIT_CAP = 16
+	InitLen = 0
+	InitCap = 16
 )
 
-// The list interface
-type List interface {
-	collection.Collection
-	Get(index int) interface{}
-	Set(index int, ele interface{}) bool
-	Insert(index int, ele interface{}) bool
-	RemoveAt(index int) interface{}
-	IndexOf(ele interface{}) int
-	LastIndexOf(ele interface{}) int
-	SubList(fromIndex, toIndex int) List
+// List The list interface
+type List[T comparable] interface {
+	collection.Collection[T]
+	Get(index int) (elem T, ok bool)
+	MustGet(index int) T
+	Set(index int, ele T) bool
+	Insert(index int, ele T) bool
+	RemoveAt(index int) (elem T, ok bool)
+	IndexOf(ele T) int
+	LastIndexOf(ele T) int
+	SubList(fromIndex, toIndex int) List[T]
 }
 
 // The Queue interface
-type Queue interface {
-	List
-	EnQueue(ele interface{}) bool
-	DeQueue() interface{}
-	Front() interface{}
-	Tail() interface{}
+type Queue[T comparable] interface {
+	List[T]
+	EnQueue(ele T) bool
+	DeQueue() (elem T, ok bool)
+	Front() T
+	Tail() T
 }
 
 // The Stack interface
-type Stack interface {
-	List
-	Push(ele interface{}) bool
-	Pop() interface{}
-	Top() interface{}
+type Stack[T comparable] interface {
+	List[T]
+	Push(ele T) bool
+	Pop() T
+	Top() T
 }

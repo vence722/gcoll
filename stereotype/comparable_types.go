@@ -1,39 +1,39 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package stereotype
 
 // The Comparable interface
 type Comparable interface {
-	CompareTo(x interface{}) int
+	CompareTo(x any) int
 }
 
 type IntComparable int
 
-func (this IntComparable) CompareTo(that interface{}) int {
+func (this IntComparable) CompareTo(that any) int {
 	return simpleCompare(this, that.(IntComparable))
 }
 
 type Int64Comparable int64
 
-func (this Int64Comparable) CompareTo(that interface{}) int {
+func (this Int64Comparable) CompareTo(that any) int {
 	return simpleCompare(this, that.(Int64Comparable))
 }
 
 type FloatComparable float32
 
-func (this FloatComparable) CompareTo(that interface{}) int {
+func (this FloatComparable) CompareTo(that any) int {
 	return simpleCompare(this, that.(FloatComparable))
 }
 
 type Float64Comparable float64
 
-func (this Float64Comparable) CompareTo(that interface{}) int {
+func (this Float64Comparable) CompareTo(that any) int {
 	return simpleCompare(this, that.(Float64Comparable))
 }
 
-func simpleCompare(v1, v2 interface{}) int {
+func simpleCompare(v1, v2 any) int {
 	switch v1.(type) {
 	case IntComparable:
 		if v1.(IntComparable) < v2.(IntComparable) {

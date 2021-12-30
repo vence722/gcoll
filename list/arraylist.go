@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package list
@@ -11,28 +11,28 @@ import (
 )
 
 // The ArrayList sturct
-type ArrayList struct {
-	elems []interface{}
+type ArrayList[T comparable] struct {
+	elems []T
 }
 
-// Return a new ArrayList
-func NewArrayList() *ArrayList {
-	return &ArrayList{make([]interface{}, INIT_LEN, INIT_CAP)}
+// NewArrayList Returns a new ArrayList
+func NewArrayList[T comparable]() *ArrayList[T] {
+	return &ArrayList[T]{make([]T, InitLen, InitCap)}
 }
 
-// Return the size of this list
-func (this *ArrayList) Size() int {
-	return len(this.elems)
+// Size Returns the size of this list
+func (list *ArrayList[T]) Size() int {
+	return len(list.elems)
 }
 
-// Return the list containing elements or not
-func (this *ArrayList) IsEmpty() bool {
-	return len(this.elems) == 0
+// IsEmpty Returns the list containing elements or not
+func (list *ArrayList[T]) IsEmpty() bool {
+	return len(list.elems) == 0
 }
 
-// Return the list conaining specified element or not
-func (this *ArrayList) Contains(ele interface{}) bool {
-	for _, o := range this.elems {
+// Contains Returns whether the list contains the specified element or not
+func (list *ArrayList[T]) Contains(ele T) bool {
+	for _, o := range list.elems {
 		if o == ele {
 			return true
 		}
@@ -40,174 +40,186 @@ func (this *ArrayList) Contains(ele interface{}) bool {
 	return false
 }
 
-// Return a slice containing all the elements in this list
-func (this *ArrayList) ToSlice() []interface{} {
-	slice := make([]interface{}, INIT_LEN, INIT_CAP)
-	for _, elem := range this.elems {
+// ToSlice Returns a slice containing all the elements in this list
+func (list *ArrayList[T]) ToSlice() []T {
+	slice := make([]T, InitLen, InitCap)
+	for _, elem := range list.elems {
 		slice = append(slice, elem)
 	}
 	return slice
 }
 
-// Return a Iterator of this list
-func (this *ArrayList) Iterate() collection.Iterator {
-	return &ArrayListIterator{this, -1}
+// Iterate Returns an Iterator of this list
+func (list *ArrayList[T]) Iterate() collection.Iterator[T] {
+	return &ArrayListIterator[T]{list, -1}
 }
 
 // Add new element to this list
-func (this *ArrayList) Add(ele interface{}) bool {
-	this.elems = append(this.elems, ele)
+func (list *ArrayList[T]) Add(ele T) bool {
+	list.elems = append(list.elems, ele)
 	return true
 }
 
 // Remove FIRST specified element from this list
-func (this *ArrayList) Remove(ele interface{}) bool {
-	for i := 0; i < len(this.elems); i++ {
-		o := this.elems[i]
+func (list *ArrayList[T]) Remove(ele T) bool {
+	for i := 0; i < len(list.elems); i++ {
+		o := list.elems[i]
 		if o == ele {
-			this.elems = append(this.elems[:i], this.elems[i+1:]...)
+			list.elems = append(list.elems[:i], list.elems[i+1:]...)
 			return true
 		}
 	}
 	return false
 }
 
-// Return the list containing specified elements or not
-func (this *ArrayList) ContainsAll(c collection.Collection) bool {
+// ContainsAll Returns whether the list contains a specified collection of elements or not
+func (list *ArrayList[T]) ContainsAll(c collection.Collection[T]) bool {
 	it := c.Iterate()
 	for it.HasNext() {
-		if !this.Contains(it.Next()) {
+		if !list.Contains(it.Next()) {
 			return false
 		}
 	}
 	return true
 }
 
-// Add a collection to this list
-func (this *ArrayList) AddAll(c collection.Collection) bool {
-	this.elems = append(this.elems, c.ToSlice()...)
+// AddAll Adds a collection to this list
+func (list *ArrayList[T]) AddAll(c collection.Collection[T]) bool {
+	list.elems = append(list.elems, c.ToSlice()...)
 	return true
 }
 
-// Remove all elements in specified collection from this list
+// RemoveAll Removes all elements in specified collection from this list
 // Could NOT call this method for the collection itself
-func (this *ArrayList) RemoveAll(c collection.Collection) bool {
+func (list *ArrayList[T]) RemoveAll(c collection.Collection[T]) bool {
 	b := false
-	if this != c {
+	if list != c {
 		it := c.Iterate()
 		for it.HasNext() {
-			b = this.Remove(it.Next()) || b
+			b = list.Remove(it.Next()) || b
 		}
 	}
 	return b
 }
 
-// Remove all elements from this list
-func (this *ArrayList) Clear() {
-	this.elems = this.elems[:0]
+// Clear Removes all elements from this list
+func (list *ArrayList[T]) Clear() {
+	list.elems = list.elems[:0]
 }
 
-// Return the element at the specified position in this list
-func (this *ArrayList) Get(index int) interface{} {
-	if index < 0 || index >= this.Size() {
-		panic("index out of bound")
+// Get Returns the element at the specified position in this list
+// Returns elem = empty value, ok = false if the index specified is invalid
+func (list *ArrayList[T]) Get(index int) (elem T, ok bool) {
+	if index < 0 || index >= list.Size() {
+		var zero T
+		return zero, false
 	}
-	return this.elems[index]
+	return list.elems[index], true
 }
 
-// Modify the element at the specified position in this list with the new one
-func (this *ArrayList) Set(index int, ele interface{}) bool {
-	if index < 0 || index >= this.Size() {
-		panic("index out of bound")
+// MustGet Returns the element at the specified position in this list
+// Returns empty value if the index specified is invalid
+func (list *ArrayList[T]) MustGet(index int) T {
+	elem, _ := list.Get(index)
+	return elem
+}
+
+// Set Modifies the element at the specified position in this list with the new one
+func (list *ArrayList[T]) Set(index int, ele T) bool {
+	if index < 0 || index >= list.Size() {
+		return false
 	}
-	this.elems[index] = ele
+	list.elems[index] = ele
 	return true
 }
 
-// Insert a new element at the specified position into this list
+// Insert Inserts a new element at the specified position into this list
 // if index == this.Size(), the new element will insert at the end of the list
-func (this *ArrayList) Insert(index int, ele interface{}) bool {
-	if index < 0 || index > this.Size() {
-		panic("index out of bound")
+func (list *ArrayList[T]) Insert(index int, ele T) bool {
+	if index < 0 || index > list.Size() {
+		return false
 	}
-	if index == this.Size() {
-		return this.Add(ele)
+	if index == list.Size() {
+		return list.Add(ele)
 	}
-	temp := append(this.elems[:index], ele)
-	this.elems = append(temp, this.elems[index+1:]...)
+	temp := append(list.elems[:index], ele)
+	list.elems = append(temp, list.elems[index+1:]...)
 	return true
 }
 
-// Remove the element at the specified position in this list
-func (this *ArrayList) RemoveAt(index int) interface{} {
-	if index < 0 || index >= this.Size() {
-		panic("index out of bound")
+// RemoveAt Removes the element at the specified position in this list
+func (list *ArrayList[T]) RemoveAt(index int) (elem T, ok bool) {
+	if index < 0 || index >= list.Size() {
+		var zero T
+		return zero, false
 	}
-	ele := this.elems[index]
-	this.elems = append(this.elems[:index], this.elems[index+1:]...)
-	return ele
+	ele := list.elems[index]
+	list.elems = append(list.elems[:index], list.elems[index+1:]...)
+	return ele, true
 }
 
-// Returns the index of the first occurrence of the specified element in this list,
+// IndexOf Returns the index of the first occurrence of the specified element in this list,
 // or -1 if this list does not contain the element.
-func (this *ArrayList) IndexOf(ele interface{}) int {
-	for i := 0; i < this.Size(); i++ {
-		if ele == this.elems[i] {
+func (list *ArrayList[T]) IndexOf(ele T) int {
+	for i := 0; i < list.Size(); i++ {
+		if ele == list.elems[i] {
 			return i
 		}
 	}
 	return -1
 }
 
-// Returns the index of the last occurrence of the specified element in this list,
+// LastIndexOf Returns the index of the last occurrence of the specified element in this list,
 // or -1 if this list does not contain the element.
-func (this *ArrayList) LastIndexOf(ele interface{}) int {
-	for i := this.Size() - 1; i >= 0; i-- {
-		if ele == this.elems[i] {
+func (list *ArrayList[T]) LastIndexOf(ele T) int {
+	for i := list.Size() - 1; i >= 0; i-- {
+		if ele == list.elems[i] {
 			return i
 		}
 	}
 	return -1
 }
 
-// Returns a view of the portion of this list between the specified range
-func (this *ArrayList) SubList(fromIndex, toIndex int) List {
-	if fromIndex < 0 || fromIndex >= this.Size() {
-		panic("fromIndex out of bound")
+// SubList Returns a view of the portion of this list between the specified range
+func (list *ArrayList[T]) SubList(fromIndex, toIndex int) List[T] {
+	emptyList := NewArrayList[T]()
+	if fromIndex < 0 || fromIndex >= list.Size() {
+		return emptyList
 	}
-	if toIndex < 0 || toIndex >= this.Size() {
-		panic("toIndex out of bound")
+	if toIndex < 0 || toIndex >= list.Size() {
+		return emptyList
 	}
 	if fromIndex > toIndex {
-		panic("fromIndex can't larger than toIndex")
+		return emptyList
 	}
-	return &ArrayList{this.elems[fromIndex:toIndex]}
+	return &ArrayList[T]{list.elems[fromIndex:toIndex]}
 }
 
-// Return the string that describes the contains of this list
-func (this *ArrayList) String() string {
-	return fmt.Sprint(this.elems)
+// String Returns the string that describes the contains of this list
+func (list *ArrayList[T]) String() string {
+	return fmt.Sprint(list.elems)
 }
 
-// The iterator struct
-type ArrayListIterator struct {
-	list  *ArrayList
+// ArrayListIterator The iterator struct
+type ArrayListIterator[T comparable] struct {
+	list  *ArrayList[T]
 	index int
 }
 
-// Does the iterator have more elements?
-func (it *ArrayListIterator) HasNext() bool {
+// HasNext Does the iterator have more elements?
+func (it *ArrayListIterator[T]) HasNext() bool {
 	if it.index+1 < it.list.Size() {
 		return true
 	}
 	return false
 }
 
-// Return the next element of the iterator
-func (it *ArrayListIterator) Next() interface{} {
+// Next Return the next element of the iterator
+func (it *ArrayListIterator[T]) Next() T {
 	if it.HasNext() {
 		it.index++
 		return it.list.elems[it.index]
 	}
-	return nil
+	var zero T
+	return zero
 }

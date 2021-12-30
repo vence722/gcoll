@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package graph
 
@@ -31,7 +31,7 @@ func (this *SimpleWeightedGraph) GetWeightedEdge(x Vertex, y Vertex) WeightedEdg
 	}
 }
 
-func (this *SimpleWeightedGraph) AddEdgeWithWeight(x Vertex, y Vertex, value interface{}, weight float64) (WeightedEdge, error) {
+func (this *SimpleWeightedGraph) AddEdgeWithWeight(x Vertex, y Vertex, value any, weight float64) (WeightedEdge, error) {
 	if this.GetEdge(x, y) != nil {
 		return nil, ERR_EDGE_EXISTS
 	}

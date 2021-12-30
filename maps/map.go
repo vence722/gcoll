@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package maps
@@ -12,35 +12,35 @@ const (
 type basemap interface {
 	Size() int
 	IsEmpty() bool
-	ContainsValue(value interface{}) bool
+	ContainsValue(value any) bool
 	Clear()
-	Values() []interface{}
+	Values() []any
 }
 
 // The Map interface
 type Map interface {
 	basemap
-	ContainsKey(key interface{}) bool
-	Get(key interface{}) interface{}
-	Put(key, value interface{}) bool
-	Remove(key interface{}) bool
+	ContainsKey(key any) bool
+	Get(key any) any
+	Put(key, value any) bool
+	Remove(key any) bool
 	PutAll(amap Map) bool
-	Keys() []interface{}
+	Keys() []any
 	Entries() []MapEntry
 }
 
 // The entry struct
 type MapEntry struct {
-	Key   interface{}
-	Value interface{}
+	Key   any
+	Value any
 }
 
 // The StringMap interface, for Maps that need to compare keys
 type StringMap interface {
 	basemap
 	ContainsKey(key string) bool
-	Get(key string) interface{}
-	Put(key string, value interface{}) bool
+	Get(key string) any
+	Put(key string, value any) bool
 	Remove(key string) bool
 	PutAll(amap StringMap) bool
 	Keys() []string
@@ -50,5 +50,5 @@ type StringMap interface {
 // The string entry struct
 type StringMapEntry struct {
 	Key   string
-	Value interface{}
+	Value any
 }

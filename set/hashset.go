@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package set
@@ -37,12 +37,12 @@ func (this *HashSet) IsEmpty() bool {
 }
 
 // Return the set conaining specified element or not
-func (this *HashSet) Contains(ele interface{}) bool {
+func (this *HashSet) Contains(ele any) bool {
 	return this.mmap.ContainsKey(ele)
 }
 
 // Return a slice containing all the elements in this set
-func (this *HashSet) ToSlice() []interface{} {
+func (this *HashSet) ToSlice() []any {
 	return this.mmap.Keys()
 }
 
@@ -52,12 +52,12 @@ func (this *HashSet) Iterate() collection.Iterator {
 }
 
 // Add new element to this set
-func (this *HashSet) Add(ele interface{}) bool {
+func (this *HashSet) Add(ele any) bool {
 	return this.mmap.Put(ele, PRESENT)
 }
 
 // Remove specified element from this set
-func (this *HashSet) Remove(ele interface{}) bool {
+func (this *HashSet) Remove(ele any) bool {
 	return this.mmap.Remove(ele)
 }
 
@@ -106,7 +106,7 @@ func (this *HashSet) String() string {
 
 // The iterator struct
 type HashSetIterator struct {
-	values []interface{}
+	values []any
 	index  int
 }
 
@@ -119,7 +119,7 @@ func (it *HashSetIterator) HasNext() bool {
 }
 
 // Return the next element of the iterator
-func (it *HashSetIterator) Next() interface{} {
+func (it *HashSetIterator) Next() any {
 	if it.HasNext() {
 		it.index++
 		return it.values[it.index]

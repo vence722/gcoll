@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package maps
@@ -10,12 +10,12 @@ import (
 
 // The HashMap struct
 type HashMap struct {
-	hmap map[interface{}]interface{}
+	hmap map[any]any
 }
 
 // Return a new HashMap
 func NewHashMap() *HashMap {
-	hmap := make(map[interface{}]interface{})
+	hmap := make(map[any]any)
 	return &HashMap{hmap}
 }
 
@@ -30,7 +30,7 @@ func (this *HashMap) IsEmpty() bool {
 }
 
 // Return the map conaining specified key or not
-func (this *HashMap) ContainsKey(key interface{}) bool {
+func (this *HashMap) ContainsKey(key any) bool {
 	for k, _ := range this.hmap {
 		if k == key {
 			return true
@@ -40,7 +40,7 @@ func (this *HashMap) ContainsKey(key interface{}) bool {
 }
 
 // Return the map conaining specified value or not
-func (this *HashMap) ContainsValue(value interface{}) bool {
+func (this *HashMap) ContainsValue(value any) bool {
 	for _, v := range this.hmap {
 		if v == value {
 			return true
@@ -50,18 +50,18 @@ func (this *HashMap) ContainsValue(value interface{}) bool {
 }
 
 // Return the element with the specified key in this map
-func (this *HashMap) Get(key interface{}) interface{} {
+func (this *HashMap) Get(key any) any {
 	return this.hmap[key]
 }
 
 // Add new key value pair to this map
-func (this *HashMap) Put(key, value interface{}) bool {
+func (this *HashMap) Put(key, value any) bool {
 	this.hmap[key] = value
 	return true
 }
 
 // Remove value with specified key from this map
-func (this *HashMap) Remove(key interface{}) bool {
+func (this *HashMap) Remove(key any) bool {
 	delete(this.hmap, key)
 	return true
 }
@@ -84,8 +84,8 @@ func (this *HashMap) Clear() {
 
 // Views
 // Return a list containing all the keys in the map
-func (this *HashMap) Keys() []interface{} {
-	keys := make([]interface{}, INIT_LEN, INIT_CAP)
+func (this *HashMap) Keys() []any {
+	keys := make([]any, INIT_LEN, INIT_CAP)
 	for k, _ := range this.hmap {
 		keys = append(keys, k)
 	}
@@ -93,8 +93,8 @@ func (this *HashMap) Keys() []interface{} {
 }
 
 // Return a list containing all the values in the map
-func (this *HashMap) Values() []interface{} {
-	values := make([]interface{}, INIT_LEN, INIT_CAP)
+func (this *HashMap) Values() []any {
+	values := make([]any, INIT_LEN, INIT_CAP)
 	for _, v := range this.hmap {
 		values = append(values, v)
 	}

@@ -16,7 +16,7 @@ type LinkedListMatrix struct {
 	numCols int
 }
 
-func (this *LinkedListMatrix) Get(x int, y int) interface{} {
+func (this *LinkedListMatrix) Get(x int, y int) any {
 	if x+1 > this.numRows || x < 0 || y+1 > this.numCols || y < 0 {
 		return nil
 	}
@@ -24,7 +24,7 @@ func (this *LinkedListMatrix) Get(x int, y int) interface{} {
 	return row.Get(y)
 }
 
-func (this *LinkedListMatrix) Set(x int, y int, value interface{}) error {
+func (this *LinkedListMatrix) Set(x int, y int, value any) error {
 	if x+1 > this.numRows || x < 0 || y+1 > this.numCols || y < 0 {
 		return ERR_INDEX_OUT_OF_BOUND
 	}
@@ -37,7 +37,7 @@ func (this *LinkedListMatrix) Size() (int, int) {
 	return this.numRows, this.numCols
 }
 
-func (this *LinkedListMatrix) Resize(numRows int, numCols int, initVal interface{}) error {
+func (this *LinkedListMatrix) Resize(numRows int, numCols int, initVal any) error {
 	if numRows < 0 || numCols < 0 {
 		return ERR_INDEX_OUT_OF_BOUND
 	}
@@ -87,7 +87,7 @@ func (this *LinkedListMatrix) RemoveAt(index int) error {
 	return nil
 }
 
-func NewLinkedMatrix(rows int, columns int, initVal interface{}) *LinkedListMatrix {
+func NewLinkedMatrix(rows int, columns int, initVal any) *LinkedListMatrix {
 	matrix := &LinkedListMatrix{rows: list.NewLinkedList()}
 	matrix.Resize(rows, columns, initVal)
 	return matrix

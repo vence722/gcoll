@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 
 package list
@@ -19,7 +19,7 @@ type LinkedList struct {
 
 // Each element of a LinkedList is stored in an entry
 type entry struct {
-	elem interface{}
+	elem any
 	next *entry
 }
 
@@ -39,7 +39,7 @@ func (this *LinkedList) IsEmpty() bool {
 }
 
 // Return the list conaining specified element or not
-func (this *LinkedList) Contains(ele interface{}) bool {
+func (this *LinkedList) Contains(ele any) bool {
 	if this.head == nil {
 		return false
 	}
@@ -54,8 +54,8 @@ func (this *LinkedList) Contains(ele interface{}) bool {
 }
 
 // Return a slice containing all the elements in this list
-func (this *LinkedList) ToSlice() []interface{} {
-	slice := make([]interface{}, INIT_LEN, INIT_CAP)
+func (this *LinkedList) ToSlice() []any {
+	slice := make([]any, InitLen, InitCap)
 	pe := this.head
 	for pe != nil {
 		slice = append(slice, pe.elem)
@@ -70,7 +70,7 @@ func (this *LinkedList) Iterate() collection.Iterator {
 }
 
 // Add new element to this list
-func (this *LinkedList) Add(ele interface{}) bool {
+func (this *LinkedList) Add(ele any) bool {
 	en := entry{ele, nil}
 	if this.head == nil && this.tail == nil {
 		this.head = &en
@@ -84,7 +84,7 @@ func (this *LinkedList) Add(ele interface{}) bool {
 }
 
 // Remove FIRST specified element from this list
-func (this *LinkedList) Remove(ele interface{}) bool {
+func (this *LinkedList) Remove(ele any) bool {
 	if this.head == nil && this.tail == nil {
 		return false
 	}
@@ -155,7 +155,7 @@ func (this *LinkedList) Clear() {
 }
 
 // Return the element at the specified position in this list
-func (this *LinkedList) Get(index int) interface{} {
+func (this *LinkedList) Get(index int) any {
 	if index < 0 || index >= this.Size() {
 		panic("index out of bound")
 	}
@@ -167,7 +167,7 @@ func (this *LinkedList) Get(index int) interface{} {
 }
 
 // Modify the element at the specified position in this list with the new one
-func (this *LinkedList) Set(index int, ele interface{}) bool {
+func (this *LinkedList) Set(index int, ele any) bool {
 	if index < 0 || index >= this.Size() {
 		panic("index out of bound")
 	}
@@ -181,7 +181,7 @@ func (this *LinkedList) Set(index int, ele interface{}) bool {
 
 // Insert a new element at the specified position into this list
 // if index == this.Size(), the new element will insert at the end of the list
-func (this *LinkedList) Insert(index int, ele interface{}) bool {
+func (this *LinkedList) Insert(index int, ele any) bool {
 	if index < 0 || index > this.Size() {
 		panic("index out of bound")
 	}
@@ -209,13 +209,13 @@ func (this *LinkedList) Insert(index int, ele interface{}) bool {
 }
 
 // Remove the element at the specified position in this list
-func (this *LinkedList) RemoveAt(index int) interface{} {
+func (this *LinkedList) RemoveAt(index int) any {
 	if index < 0 || index >= this.Size() {
 		panic("index out of bound")
 	}
 	pe := this.head
 	var ps *entry
-	var ele interface{}
+	var ele any
 	ps = nil
 	for i := 0; i < index; i++ {
 		ps = pe
@@ -243,7 +243,7 @@ func (this *LinkedList) RemoveAt(index int) interface{} {
 
 // Returns the index of the first occurrence of the specified element in this list,
 // or -1 if this list does not contain the element.
-func (this *LinkedList) IndexOf(ele interface{}) int {
+func (this *LinkedList) IndexOf(ele any) int {
 	pe := this.head
 	index := -1
 	for pe != nil {
@@ -258,7 +258,7 @@ func (this *LinkedList) IndexOf(ele interface{}) int {
 
 // Returns the index of the last occurrence of the specified element in this list,
 // or -1 if this list does not contain the element.
-func (this *LinkedList) LastIndexOf(ele interface{}) int {
+func (this *LinkedList) LastIndexOf(ele any) int {
 	lastIndex := -1
 	pe := this.head
 	index := -1
@@ -319,7 +319,7 @@ func (it *LinkedListIterator) HasNext() bool {
 }
 
 // Return the next element of the iterator
-func (it *LinkedListIterator) Next() interface{} {
+func (it *LinkedListIterator) Next() any {
 	if it.HasNext() {
 		it.index++
 		return it.list.Get(it.index)
@@ -328,13 +328,13 @@ func (it *LinkedListIterator) Next() interface{} {
 }
 
 // Put an element at the tail of the Queue
-func (this *LinkedList) EnQueue(ele interface{}) bool {
+func (this *LinkedList) EnQueue(ele any) bool {
 	return this.Add(ele)
 }
 
 // Remove the first element of the Queue and return it
 // If there're no elements, return a nil value
-func (this *LinkedList) DeQueue() interface{} {
+func (this *LinkedList) DeQueue() any {
 	if this.head == nil {
 		return nil
 	}
@@ -343,7 +343,7 @@ func (this *LinkedList) DeQueue() interface{} {
 
 // Return the front of the Queue
 // If there's no element, return a nil value
-func (this *LinkedList) Front() interface{} {
+func (this *LinkedList) Front() any {
 	if this.head == nil {
 		return nil
 	}
@@ -352,7 +352,7 @@ func (this *LinkedList) Front() interface{} {
 
 // Return the tail of the Queue
 // If there's no element, return a nil value
-func (this *LinkedList) Tail() interface{} {
+func (this *LinkedList) Tail() any {
 	if this.tail == nil {
 		return nil
 	}
@@ -360,13 +360,13 @@ func (this *LinkedList) Tail() interface{} {
 }
 
 // Push an element into the Stack
-func (this *LinkedList) Push(ele interface{}) bool {
+func (this *LinkedList) Push(ele any) bool {
 	return this.Insert(0, ele)
 }
 
 // Pop the last pushed element from the Stack
 // If there's no element, return a nil value
-func (this *LinkedList) Pop() interface{} {
+func (this *LinkedList) Pop() any {
 	if this.head == nil {
 		return nil
 	}
@@ -375,7 +375,7 @@ func (this *LinkedList) Pop() interface{} {
 
 // Return the last pushed element from the Stack
 // If there's no element, return a nil value
-func (this *LinkedList) Top() interface{} {
+func (this *LinkedList) Top() any {
 	if this.head == nil {
 		return nil
 	}

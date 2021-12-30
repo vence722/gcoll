@@ -1,5 +1,5 @@
 // gcoll
-// @description gcoll is a go collection library which you can use like in Java
+// @description gcoll is a collection library of the most frequently used data structures in Go programing language
 // @authors     Vence Lin(vence722@gmail.com)
 package lru
 
@@ -30,7 +30,7 @@ func NewFifoLRUCache(capacity int) *FifoLRUCache {
 // and the LRU cache is not full, add a new entry.
 // Otherwise remove the tail of the FIFO queue
 // before inserting the new element.
-func (this *FifoLRUCache) Put(key interface{}, value interface{}) {
+func (this *FifoLRUCache) Put(key any, value any) {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
@@ -50,7 +50,7 @@ func (this *FifoLRUCache) Put(key interface{}, value interface{}) {
 
 // Find the element from the LRU Cache by the key.
 // Returns nil if no such key is found.
-func (this *FifoLRUCache) Get(key interface{}) interface{} {
+func (this *FifoLRUCache) Get(key any) any {
 	this.mutex.Lock()
 	defer this.mutex.Unlock()
 
@@ -89,7 +89,7 @@ func (this *FifoLRUCache) eliminate() {
 }
 
 // Loop the Fifo queue and find the element by key
-func (this *FifoLRUCache) findByKey(key interface{}) (bool, *entry) {
+func (this *FifoLRUCache) findByKey(key any) (bool, *entry) {
 	found := false
 	var elem *entry
 	it := this.fifoQueue.Iterate()

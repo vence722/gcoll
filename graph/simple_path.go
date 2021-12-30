@@ -27,7 +27,7 @@ func (this *SimplePath) Nodes() []Node {
 	return this.nodes
 }
 
-func (this *SimplePath) AddNode(key interface{}, value interface{}, weightToPrev float64) error {
+func (this *SimplePath) AddNode(key any, value any, weightToPrev float64) error {
 	if this.GetNode(key) != nil {
 		return ERR_NODE_EXISTS
 	}
@@ -44,7 +44,7 @@ func (this *SimplePath) AddNode(key interface{}, value interface{}, weightToPrev
 	return nil
 }
 
-func (this *SimplePath) GetNode(key interface{}) Node {
+func (this *SimplePath) GetNode(key any) Node {
 	for _, node := range this.Nodes() {
 		if node.Key() == key {
 			return node
@@ -76,17 +76,17 @@ func (this *SimplePath) TotalWeight() float64 {
 }
 
 type SimpleNode struct {
-	key          interface{}
-	value        interface{}
+	key          any
+	value        any
 	next         *SimpleNode
 	weightToPrev float64
 }
 
-func (this *SimpleNode) Key() interface{} {
+func (this *SimpleNode) Key() any {
 	return this.key
 }
 
-func (this *SimpleNode) Value() interface{} {
+func (this *SimpleNode) Value() any {
 	return this.value
 }
 
