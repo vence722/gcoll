@@ -3,13 +3,44 @@
 // @authors     Vence Lin(vence722@gmail.com)
 package gcoll
 
-//func TestList(t *testing.T) {
-//	lnkList := list.NewLinkedList()
-//	lnkList.Add(nil)
-//	lnkList.Add(nil)
-//	lnkList.Set(1, 1)
-//	t.Log(lnkList)
-//}
+import (
+	"gcoll/list"
+	"github.com/stretchr/testify/assert"
+	"strings"
+	"testing"
+)
+
+func TestArrayList(t *testing.T) {
+	arrayList := list.NewArrayList[string]()
+	arrayList.Add("test1")
+	arrayList.Add("test2")
+	arrayList.Add("test3")
+
+	assert.Equal(t, arrayList.Size(), 3)
+	assert.Equal(t, arrayList.IsEmpty(), false)
+	assert.Equal(t, arrayList.Contains("test1"), true)
+	assert.Equal(t, arrayList.Contains("test4"), false)
+	assert.Equal(t, arrayList.MustGet(0), "test1")
+
+	it := arrayList.Iterate()
+	for it.HasNext() {
+		assert.Equal(t, strings.HasPrefix(it.Next(), "test"), true)
+	}
+
+	arrayList.RemoveAt(0)
+	assert.Equal(t, arrayList.Size(), 2)
+}
+
+func TestLinkedList(t *testing.T) {
+	lnkList := list.NewLinkedList[int]()
+	lnkList.Add(3)
+	lnkList.Add(2)
+	lnkList.Set(1, 1)
+
+	assert.Equal(t, lnkList.IsEmpty(), false)
+	assert.Equal(t, lnkList.Size(), 2)
+}
+
 //
 //func TestLRUCache(t *testing.T) {
 //	// === Test Fifo LRU Cache ===
