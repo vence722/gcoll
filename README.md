@@ -3,6 +3,14 @@ gcoll --- go collection library
 
 A collection library of the most frequently used data structures in Go programing language.
 
+Requirements
+-----
+```
+go version >= 1.8
+```
+
+gcoll version 2 is released, which supports generic types in Go 1.8.
+
 Installation
 -----
 
@@ -14,19 +22,19 @@ Usage
 -----
 
 
-Use the constructor functions that defines in gcoll namespace to create collection classes. The naming pattern is very straightforward.For example:
+Use the constructor functions that defines in gcoll namespace to create collection objects. The names of the constructors are straightforward. For example:
 
 ```
-list := gcoll.NewLinkedList()
+list := gcoll.NewLinkedList[int]()
 ```
 
-It creates a linked-list collection. Then you can use the collection class by calling its methods in a much object-oriented way.
+It creates a linked-list of integer type. Then you can use it in a very object-oriented way.
 
 ```
 // Insert element
 list.Add(3)
 // Retrieve element
-obj := list.Get(0)
+obj, ok := list.Get(0)
 // Remove element
 list.Remove(obj)
 // Get the size of the collection
@@ -46,7 +54,7 @@ Stack: LinkedList
 
 Set: HashSet
 
-Map: HashMap, BinarySortTree
+Map: HashMap
 
 Heap: ArrayHeap
 
