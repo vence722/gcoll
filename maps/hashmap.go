@@ -9,29 +9,29 @@ import (
 )
 
 // The HashMap struct
-type HashMap struct {
-	hmap map[any]any
+type HashMap[K comparable, V any] struct {
+	hmap map[K]V
 }
 
-// Return a new HashMap
-func NewHashMap() *HashMap {
-	hmap := make(map[any]any)
-	return &HashMap{hmap}
+// NewHashMap Returns a new HashMap
+func NewHashMap[K comparable, V any]() *HashMap[K, V] {
+	hmap := make(map[K]V)
+	return &HashMap[K, V]{hmap}
 }
 
-// Return the size of the map
-func (this *HashMap) Size() int {
-	return len(this.hmap)
+// Size Returns the size of the map
+func (m *HashMap[K, V]) Size() int {
+	return len(m.hmap)
 }
 
-// Return the map containing elements or not
-func (this *HashMap) IsEmpty() bool {
-	return len(this.hmap) == 0
+// IsEmpty Returns the map containing elements or not
+func (m *HashMap[K, V]) IsEmpty() bool {
+	return len(m.hmap) == 0
 }
 
-// Return the map conaining specified key or not
-func (this *HashMap) ContainsKey(key any) bool {
-	for k, _ := range this.hmap {
+// ContainsKey Returns the map conaining specified key or not
+func (m *HashMap[K, V]) ContainsKey(key K) bool {
+	for k, _ := range m.hmap {
 		if k == key {
 			return true
 		}
@@ -39,78 +39,68 @@ func (this *HashMap) ContainsKey(key any) bool {
 	return false
 }
 
-// Return the map conaining specified value or not
-func (this *HashMap) ContainsValue(value any) bool {
-	for _, v := range this.hmap {
-		if v == value {
-			return true
-		}
-	}
-	return false
+// Get Returns the element with the specified key in this map
+func (m *HashMap[K, V]) Get(key K) (ele V, ok bool) {
+	v, ok := m.hmap[key]
+	return v, ok
 }
 
-// Return the element with the specified key in this map
-func (this *HashMap) Get(key any) any {
-	return this.hmap[key]
-}
-
-// Add new key value pair to this map
-func (this *HashMap) Put(key, value any) bool {
-	this.hmap[key] = value
+// Put Adds new key value pair to this map
+func (m *HashMap[K, V]) Put(key K, value V) bool {
+	m.hmap[key] = value
 	return true
 }
 
-// Remove value with specified key from this map
-func (this *HashMap) Remove(key any) bool {
-	delete(this.hmap, key)
+// Remove Removes value with specified key from this map
+func (m *HashMap[K, V]) Remove(key K) bool {
+	delete(m.hmap, key)
 	return true
 }
 
-// Add another map to this map
-func (this *HashMap) PutAll(amap Map) bool {
+// PutAll Adds another map to this map
+func (m *HashMap[K, V]) PutAll(amap Map[K, V]) bool {
 	entries := amap.Entries()
-	for i := 0; i < len(entries); i++ {
-		this.Put(entries[i].Key, entries[i].Value)
+	for _, entry := range entries {
+		m.Put(entry.Key, entry.Value)
 	}
 	return true
 }
 
-// Remove all elements from this map
-func (this *HashMap) Clear() {
-	for k, _ := range this.hmap {
-		delete(this.hmap, k)
+// Clear Removes all elements from this map
+func (m *HashMap[K, V]) Clear() {
+	for k, _ := range m.hmap {
+		delete(m.hmap, k)
 	}
 }
 
-// Views
-// Return a list containing all the keys in the map
-func (this *HashMap) Keys() []any {
-	keys := make([]any, INIT_LEN, INIT_CAP)
-	for k, _ := range this.hmap {
+// Keys Returns a copy of all the keys in the map
+func (m *HashMap[K, V]) Keys() []K {
+	var keys []K
+	for k, _ := range m.hmap {
 		keys = append(keys, k)
 	}
 	return keys
 }
 
-// Return a list containing all the values in the map
-func (this *HashMap) Values() []any {
-	values := make([]any, INIT_LEN, INIT_CAP)
-	for _, v := range this.hmap {
+// Values Returns a copy of all the values in the map
+func (m *HashMap[K, V]) Values() []V {
+	var values []V
+	for _, v := range m.hmap {
 		values = append(values, v)
 	}
 	return values
 }
 
-// Return a list containing the copy of all the entries in the map
-func (this *HashMap) Entries() []MapEntry {
-	entries := make([]MapEntry, INIT_LEN, INIT_CAP)
-	for k, v := range this.hmap {
-		entries = append(entries, MapEntry{k, v})
+// Entries Returns a copy of all the entries in the map
+func (m *HashMap[K, V]) Entries() []MapEntry[K, V] {
+	var entries []MapEntry[K, V]
+	for k, v := range m.hmap {
+		entries = append(entries, MapEntry[K, V]{k, v})
 	}
 	return entries
 }
 
-// Return the string that describes the contains of this map
-func (this *HashMap) String() string {
-	return fmt.Sprint(this.hmap)
+// String Returns the string that describes the contents of this map
+func (m *HashMap[K, V]) String() string {
+	return fmt.Sprint(m.hmap)
 }

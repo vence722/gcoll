@@ -6,6 +6,6 @@ package set
 
 import "gcoll/collection"
 
-type Set interface {
-	collection.Collection
+type Set[T comparable] interface {
+	collection.Collection[T]
 }

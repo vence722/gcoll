@@ -9,46 +9,32 @@ const (
 	INIT_CAP = 16
 )
 
-type basemap interface {
+// The Map interface
+type Map[K comparable, V any] interface {
 	Size() int
 	IsEmpty() bool
-	ContainsValue(value any) bool
 	Clear()
-	Values() []any
+	Keys() []K
+	Values() []V
+	Entries() []MapEntry[K, V]
+	ContainsKey(key K) bool
+	Get(key K) (ele V, ok bool)
+	Put(key K, value V) bool
+	Remove(key K) bool
+	PutAll(m Map[K, V]) bool
 }
 
-// The Map interface
-type Map interface {
-	basemap
-	ContainsKey(key any) bool
-	Get(key any) any
-	Put(key, value any) bool
-	Remove(key any) bool
-	PutAll(amap Map) bool
-	Keys() []any
-	Entries() []MapEntry
+// The MapEntry struct
+type MapEntry[K comparable, V any] struct {
+	Key   K
+	Value V
 }
 
-// The entry struct
-type MapEntry struct {
-	Key   any
-	Value any
-}
-
-// The StringMap interface, for Maps that need to compare keys
-type StringMap interface {
-	basemap
-	ContainsKey(key string) bool
-	Get(key string) any
-	Put(key string, value any) bool
-	Remove(key string) bool
-	PutAll(amap StringMap) bool
-	Keys() []string
-	Entries() []StringMapEntry
-}
-
-// The string entry struct
-type StringMapEntry struct {
-	Key   string
-	Value any
+type SyncMap[K comparable, V any] interface {
+	Store(key K, value V)
+	Load(key K) (V, bool)
+	LoadOrStore(key K, value V) (V, bool)
+	LoadAndDelete(key K) (V, bool)
+	Delete(key K)
+	Range(f func(key K, value V) bool)
 }

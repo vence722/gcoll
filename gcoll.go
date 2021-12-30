@@ -5,13 +5,11 @@
 package gcoll
 
 import (
-	"gcoll/graph"
 	"gcoll/heap"
 	"gcoll/list"
 	"gcoll/lru"
 	"gcoll/maps"
 	"gcoll/set"
-	"gcoll/tree"
 )
 
 func NewArrayList[T comparable]() list.List[T] {
@@ -30,43 +28,31 @@ func NewStack[T comparable]() list.Stack[T] {
 	return list.NewLinkedList[T]()
 }
 
-func NewHashMap() maps.Map {
-	return maps.NewHashMap()
+func NewHashMap[K comparable, V any]() maps.Map[K, V] {
+	return maps.NewHashMap[K, V]()
 }
 
-func NewBSTreeMap() maps.StringMap {
-	return tree.NewBinarySortTree()
+func NewSyncMap[K comparable, V any]() maps.SyncMap[K, V] {
+	return maps.NewTypedSyncMap[K, V]()
 }
 
-func NewHashSet() set.Set {
-	return set.NewHashSet()
+func NewHashSet[T comparable]() set.Set[T] {
+	return set.NewHashSet[T]()
 }
 
 func NewArrayHeap() heap.Heap {
 	return heap.NewArrayHeap()
 }
 
-func NewFifoLRUCache(capacity int) lru.LRUCache {
-	return lru.NewFifoLRUCache(capacity)
+func NewFifoLRUCache[K comparable, V any](capacity int) lru.LRUCache[K, V] {
+	return lru.NewFifoLRUCache[K, V](capacity)
 }
 
-func NewHitsMapLRUCache(capacity int) lru.LRUCache {
-	return lru.NewHitsMapLRUCache(capacity)
+func NewHitsMapLRUCache[K comparable, V any](capacity int) lru.LRUCache[K, V] {
+	return lru.NewHitsMapLRUCache[K, V](capacity)
 }
 
 func NewPriorityQueue() heap.PriorityQueue {
 	// Use ArrayHeap as Priority Queue
 	return heap.NewArrayHeap()
-}
-
-func NewSimpleGraph() graph.Graph {
-	return graph.NewSimpleGraph()
-}
-
-func NewWeightedSimpleGraph() graph.WeightedGraph {
-	return graph.NewSimpleWeightedGraph()
-}
-
-func NewAdjacencyMatrixGraph() graph.WeightedGraph {
-	return graph.NewAdjacencyMatrixGraph()
 }

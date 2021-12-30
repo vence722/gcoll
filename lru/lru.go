@@ -5,16 +5,16 @@
 package lru
 
 // Data entry
-type entry struct {
-	key   any
-	value any
+type entry[K comparable, V any] struct {
+	key   K
+	value V
 }
 
-// LRU Cache interface
+// LRUCache LRU Cache interface
 // All implementations should all support concurrent access
-type LRUCache interface {
-	Put(key any, value any)
-	Get(key any) any
+type LRUCache[K comparable, V any] interface {
+	Put(key K, value V) bool
+	Get(key K) (ele V, ok bool)
 	Size() int
 	Cap() int
 	Clear()

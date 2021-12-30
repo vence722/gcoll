@@ -12,69 +12,69 @@ import (
 )
 
 const (
-	PRESENT = ""
+	Present = ""
 )
 
 // The HashSet struct
-type HashSet struct {
-	mmap maps.Map
+type HashSet[T comparable] struct {
+	mmap maps.Map[T, any]
 }
 
-// Return a new HashSet
-func NewHashSet() *HashSet {
-	mmap := maps.NewHashMap()
-	return &HashSet{mmap}
+// NewHashSet Return a new HashSet
+func NewHashSet[T comparable]() *HashSet[T] {
+	mmap := maps.NewHashMap[T, any]()
+	return &HashSet[T]{mmap}
 }
 
-// Return the size of this set
-func (this *HashSet) Size() int {
-	return this.mmap.Size()
+// Size Returns the size of this set
+func (s *HashSet[T]) Size() int {
+	return s.mmap.Size()
 }
 
-// Return the set containing elements or not
-func (this *HashSet) IsEmpty() bool {
-	return this.mmap.Size() != 0
+// IsEmpty Returns the set containing elements or not
+func (s *HashSet[T]) IsEmpty() bool {
+	return s.mmap.Size() != 0
 }
 
-// Return the set conaining specified element or not
-func (this *HashSet) Contains(ele any) bool {
-	return this.mmap.ContainsKey(ele)
+// Contains Returns whether the set contains specified element or not
+func (s *HashSet[T]) Contains(ele T) bool {
+	return s.mmap.ContainsKey(ele)
 }
 
-// Return a slice containing all the elements in this set
-func (this *HashSet) ToSlice() []any {
-	return this.mmap.Keys()
+// ToSlice Returns a slice containing all the elements in this set
+func (s *HashSet[T]) ToSlice() []T {
+	return s.mmap.Keys()
 }
 
-// Return a Iterator of this set
-func (this *HashSet) Iterate() collection.Iterator {
-	return &HashSetIterator{this.mmap.Keys(), -1}
+// Iterate Returns a Iterator of this set
+func (s *HashSet[T]) Iterate() collection.Iterator[T] {
+	return &HashSetIterator[T]{s.mmap.Keys(), -1}
 }
 
 // Add new element to this set
-func (this *HashSet) Add(ele any) bool {
-	return this.mmap.Put(ele, PRESENT)
+func (s *HashSet[T]) Add(ele T) bool {
+	return s.mmap.Put(ele, Present)
 }
 
-// Remove specified element from this set
-func (this *HashSet) Remove(ele any) bool {
-	return this.mmap.Remove(ele)
+// Remove Removes specified element from this set
+func (s *HashSet[T]) Remove(ele T) bool {
+	return s.mmap.Remove(ele)
 }
 
-// Add a collection to this set
-func (this *HashSet) AddAll(c collection.Collection) bool {
+// AddAll Adds a collection to this set
+func (s *HashSet[T]) AddAll(c collection.Collection[T]) bool {
 	it := c.Iterate()
 	for it.HasNext() {
-		this.Add(it.Next())
+		s.Add(it.Next())
 	}
 	return true
 }
 
-// Return the list containing specified elements or not
-func (this *HashSet) ContainsAll(c collection.Collection) bool {
+// ContainsAll Returns whether the list contains the specified elements or not
+func (s *HashSet[T]) ContainsAll(c collection.Collection[T]) bool {
 	it := c.Iterate()
 	for it.HasNext() {
-		if !this.Contains(it.Next()) {
+		if !s.Contains(it.Next()) {
 			return false
 		}
 	}
@@ -83,46 +83,47 @@ func (this *HashSet) ContainsAll(c collection.Collection) bool {
 
 // Remove all elements in specified collection from this set
 // Could NOT call this method for the collection itself
-func (this *HashSet) RemoveAll(c collection.Collection) bool {
+func (s *HashSet[T]) RemoveAll(c collection.Collection[T]) bool {
 	b := false
-	if this != c {
+	if s != c {
 		it := c.Iterate()
 		for it.HasNext() {
-			b = this.Remove(it.Next()) || b
+			b = s.Remove(it.Next()) || b
 		}
 	}
 	return b
 }
 
 // Remove all elements from this set
-func (this *HashSet) Clear() {
-	this.mmap.Clear()
+func (s *HashSet[T]) Clear() {
+	s.mmap.Clear()
 }
 
 // Return the string that describes the contains of this list
-func (this *HashSet) String() string {
-	return fmt.Sprint(this.ToSlice())
+func (s *HashSet[T]) String() string {
+	return fmt.Sprint(s.ToSlice())
 }
 
-// The iterator struct
-type HashSetIterator struct {
-	values []any
+// HashSetIterator The iterator struct
+type HashSetIterator[T comparable] struct {
+	values []T
 	index  int
 }
 
-// Does the iterator have more elements?
-func (it *HashSetIterator) HasNext() bool {
+// HasNext Does the iterator have more elements?
+func (it *HashSetIterator[T]) HasNext() bool {
 	if it.index+1 < len(it.values) {
 		return true
 	}
 	return false
 }
 
-// Return the next element of the iterator
-func (it *HashSetIterator) Next() any {
+// Next Returns the next element of the iterator
+func (it *HashSetIterator[T]) Next() T {
 	if it.HasNext() {
 		it.index++
 		return it.values[it.index]
 	}
-	return nil
+	var zero T
+	return zero
 }
