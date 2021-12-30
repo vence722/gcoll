@@ -4,8 +4,8 @@
 package gcoll
 
 import (
-	"gcoll/list"
 	"github.com/stretchr/testify/assert"
+	"github.com/vence722/gcoll/list"
 	"strings"
 	"testing"
 )

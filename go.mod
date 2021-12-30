@@ -1,4 +1,4 @@
-module gcoll
+module github.com/vence722/gcoll
 
 go 1.18
 

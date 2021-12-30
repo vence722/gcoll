@@ -4,7 +4,7 @@
 
 package set
 
-import "gcoll/collection"
+import "github.com/vence722/gcoll/collection"
 
 type Set[T comparable] interface {
 	collection.Collection[T]

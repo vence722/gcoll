@@ -5,11 +5,11 @@
 package gcoll
 
 import (
-	"gcoll/heap"
-	"gcoll/list"
-	"gcoll/lru"
-	"gcoll/maps"
-	"gcoll/set"
+	"github.com/vence722/gcoll/heap"
+	"github.com/vence722/gcoll/list"
+	"github.com/vence722/gcoll/lru"
+	"github.com/vence722/gcoll/maps"
+	"github.com/vence722/gcoll/set"
 )
 
 func NewArrayList[T comparable]() list.List[T] {
