@@ -4,10 +4,12 @@
 package gcoll
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/vence722/gcoll/list"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/vence722/gcoll/heap"
+	"github.com/vence722/gcoll/list"
 )
 
 func TestArrayList(t *testing.T) {
@@ -41,7 +43,26 @@ func TestLinkedList(t *testing.T) {
 	assert.Equal(t, lnkList.Size(), 2)
 }
 
-//
+type StringComparable string
+
+func (this StringComparable) CompareTo(other heap.Comparable) int {
+	return strings.Compare(string(this), string(other.(StringComparable)))
+}
+
+func TestHeap(t *testing.T) {
+	h := heap.NewArrayHeap[StringComparable]()
+	h.Put(StringComparable("one"))
+	h.Put(StringComparable("two"))
+	h.Put(StringComparable("three"))
+
+	top := h.Top()
+	assert.Equal(t, string(top), "one")
+
+	h.Take()
+	take := h.Take()
+	assert.Equal(t, string(take), "three")
+}
+
 //func TestLRUCache(t *testing.T) {
 //	// === Test Fifo LRU Cache ===
 //	fifoLRU := lru.NewFifoLRUCache(5)

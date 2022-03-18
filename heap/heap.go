@@ -10,17 +10,17 @@ const (
 
 // The element need to be comparable in the Heap structure
 type Comparable interface {
-	CompareTo(x any) int
+	CompareTo(x Comparable) int
 }
 
 // The generic heap interface
-type Heap interface {
+type Heap[T Comparable] interface {
 	// Put
-	Put(ele Comparable)
+	Put(ele T)
 	// See the top element without taking it
-	Top() Comparable
+	Top() T
 	// Take the top element
-	Take() Comparable
+	Take() T
 	// The current number of elements
 	Size() int
 	// Return if the heap has no element
@@ -28,9 +28,9 @@ type Heap interface {
 }
 
 // The PriorityQueue interface
-type PriorityQueue interface {
-	EnQueue(ele Comparable) bool
-	DeQueue() Comparable
-	Front() Comparable
+type PriorityQueue[T Comparable] interface {
+	EnQueue(ele T) bool
+	DeQueue() T
+	Front() T
 	Size() int
 }

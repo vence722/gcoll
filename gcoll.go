@@ -40,8 +40,8 @@ func NewHashSet[T comparable]() set.Set[T] {
 	return set.NewHashSet[T]()
 }
 
-func NewArrayHeap() heap.Heap {
-	return heap.NewArrayHeap()
+func NewArrayHeap[T heap.Comparable]() heap.Heap[T] {
+	return heap.NewArrayHeap[T]()
 }
 
 func NewFifoLRUCache[K comparable, V any](capacity int) lru.LRUCache[K, V] {
@@ -52,7 +52,7 @@ func NewHitsMapLRUCache[K comparable, V any](capacity int) lru.LRUCache[K, V] {
 	return lru.NewHitsMapLRUCache[K, V](capacity)
 }
 
-func NewPriorityQueue() heap.PriorityQueue {
+func NewPriorityQueue[T heap.Comparable]() heap.PriorityQueue[T] {
 	// Use ArrayHeap as Priority Queue
-	return heap.NewArrayHeap()
+	return heap.NewArrayHeap[T]()
 }
