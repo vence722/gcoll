@@ -18,12 +18,8 @@ func (m *TypedSyncMap[K, V]) Load(key K) (V, bool) {
 }
 
 func (m *TypedSyncMap[K, V]) LoadOrStore(key K, value V) (V, bool) {
-	r, ok := (*sync.Map)(m).LoadOrStore(key, value)
-	if ok {
-		return r.(V), ok
-	}
-	var zero V
-	return zero, ok
+	r, loaded := (*sync.Map)(m).LoadOrStore(key, value)
+	return r.(V), loaded
 }
 
 func (m *TypedSyncMap[K, V]) LoadAndDelete(key K) (V, bool) {
